@@ -1,0 +1,25 @@
+.password-input-wrapper {
+    position: relative;
+  }
+  
+  .password-input {
+    /* Add any additional styles for the password input */
+  }
+  
+  .password-toggle-btn { 
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+  }
+  
+  /* Add any additional styles for the eye icon if necessary */
+  
+  
