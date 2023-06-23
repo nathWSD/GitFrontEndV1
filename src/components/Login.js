@@ -134,7 +134,7 @@ const Login = () => {
 
           <div>
             <Link style={{textDecoration:'none',
-              color:'red'}} to="/Datuser-profile">forgotten password?</Link>
+              color:'red'}} to="/userprofilecheck">forgotten password?</Link>
           </div>
         
 

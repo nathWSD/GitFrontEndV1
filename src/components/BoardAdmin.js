@@ -27,7 +27,7 @@ const BoardAdmin = () => {
 
       <div>
       <Link style={{textDecoration:'none',
-      color:'blue'}} to="/user-profile">change personal data</Link>
+      color:'blue'}} to="/user-info">change personal data</Link>
      </div>
         </p>
 

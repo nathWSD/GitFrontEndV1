@@ -1,0 +1,34 @@
+.userInfo {
+    display: grid;
+    grid-template-columns: max-content auto;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .userInfo label {
+    font-weight: bold;
+  }
+  
+  .userInfo input {
+    padding: 5px;
+  }
+  
+  .UserInfo button1 {
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .UserInfo button2 {
+    background-color: rgb(153, 0, 255);
+    color: rgb(255, 255, 255);
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

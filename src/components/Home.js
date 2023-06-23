@@ -21,8 +21,17 @@ const Home = () => {
     );
   }, []);
 
+  const backgroundImageUrl = 'https://cdn.wallpapersafari.com/93/9/kguQhG.jpg';
   return (
-    <div className="container">
+
+    <div className="container" 
+    style={{
+      backgroundImage:`url(${backgroundImageUrl})`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      height: '100vh',
+    }}>
       <header className="jumbotron">
         <h3>{content}</h3>
       </header>

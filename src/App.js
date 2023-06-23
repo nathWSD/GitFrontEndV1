@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Router, Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import "./background-image.css";
 import UserProfileCheck from './components/UserProfileCheck';
 import UserInfo from './components/UserInfo';
 import AuthService from "./services/auth.service";
@@ -49,7 +50,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className= 'background-image'>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
         <Link to={"/"} className="navbar-brand">
           Home
@@ -121,6 +122,7 @@ const App = () => {
       </nav>
 
       <div className="container mt-3">
+      
         <Routes>
           <Route exact path={"/"} element={<Home />} />
           <Route exact path={"/standort"} element={<Standort />} />
@@ -131,11 +133,11 @@ const App = () => {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/profile" element={<Profile />} />
-          <Route exact path="/user-profile" element={UserProfileCheck} />
-          <Route exact path="/user-info" element={UserInfo} />
+          <Route exact path={"/userprofilecheck"} element={<UserProfileCheck/>} />
+          <Route exact path={"/user-info"} element={<UserInfo/>} />
           <Route exact path="/buchung" element={<Buchung />} />
-
          </Routes>
+       
       </div>
 
      

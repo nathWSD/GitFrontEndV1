@@ -249,9 +249,16 @@ const onChangeStreetNameAndNumber = (e) => {
   };
 
 
- 
+  const backgroundImageUrl = 'https://wallpaperaccess.com/full/194935.jpg';
+
   return (
-    <div className="col-md-12">
+    <div style={{
+      backgroundImage:`url(${backgroundImageUrl})`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      height: '100vh',
+    }} className="col-md-12">
       <div className="card card-container">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
