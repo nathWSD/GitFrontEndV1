@@ -1,14 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState ,useRef} from 'react';
 import AuthService from "../services/auth.service";
 import "./UserInfo.css";
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import BoardAdmin from './BoardAdmin';
+import BoardUser from './BoardUser';
+import BoardModerator from './BoardModerator';
+import { useNavigate   } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 const UserInfo = () => {
-    const currentUser = AuthService.getCurrentUser();
-  const [userData, setUserData] = useState(currentUser);
+  const navigate = useNavigate();
+      const currentUser = AuthService.getCurrentUser();
 
   const [editing, setEditing] = useState(false);
   const [editedData, setEditedData] = useState({});
-
+  const [userData, setUserData] = useState({
+    id:'',
+    username: '',
+    firstname: '',
+    surname: '',
+    email: '',
+    password: '',
+    city: '',
+    postalCode: '',
+    country: '',
+    streetNameAndNumber: '',
+    phonenumber: '',
+    tarif: '', /* must be nullable at back end  */
+    checkpassword: '',
+  });
+ 
+  const form = useRef();
+  const tarifOptions = [
+    { label: 'basic', value: 'basic' },
+    { label: 'standard', value: 'standard' },
+    { label: 'premium', value: 'premium' },
+  ];
   const handleEdit = () => {
     setEditing(true);
     setEditedData({ ...userData });
@@ -16,18 +46,72 @@ const UserInfo = () => {
 
   const handleSave = () => {
     setUserData({ ...editedData });
-    setEditing(false);
-  };
+    console.log(editedData);
 
+    setEditing(false);
+    console.log(currentUser.token);
+    AuthService.changePersonalData(
+      editedData.id,
+       editedData.username,
+     editedData.firstname,
+    editedData.surname,
+    editedData.email,
+     editedData.password,
+    editedData.city,
+       editedData.postalCode,
+    editedData.country,
+    editedData.streetNameAndNumber,
+      editedData.phonenumber,
+    editedData.tarif,
+      editedData.checkpassword,
+     )
+      .then(() => {
+        toast('Personal Data changed successful.', { autoClose: 2000 });
+        // Navigation based on user role
+        if (currentUser && currentUser.roles && currentUser.roles.includes("ROLE_ADMIN")) {
+          navigate('/BoardAdmin');
+        } else if (currentUser && currentUser.roles && currentUser.roles.includes("ROLE_WORKER")) {
+          navigate('/BoardModerator');
+        } else if (currentUser && currentUser.roles && currentUser.roles.includes("ROLE_USER")) {
+          navigate('/BoardUser');
+        } else {
+        }
+      })
+      .catch((error) => {
+        // Handle error
+        toast.error('Failed to change personal data.', { autoClose: 2000 });
+        console.log(error);
+      });
+  };
+   
+  
   const handleChange = (e) => {
     setEditedData({
       ...editedData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   return (
+
+    
+
     <div className="UserInfo">
+
+<div>
+        <label className='UserInfo label'>your ID: </label>
+        {editing ? (
+          <input className= 'UserInfo input'
+            type="number"
+            name="id"
+            value={editedData.id || ''}
+            onChange={handleChange}
+          />
+        ) : (
+          <span>{userData.id}</span>
+        )}
+      </div>
+
       <div>
         <label className='UserInfo label'>First name: </label>
         {editing ? (
@@ -84,23 +168,19 @@ const UserInfo = () => {
         )}
       </div>
 
-
-     {/*  <div>
-        <label>Repeat Password: </label>
+      <div>
+        <label className='UserInfo label'>Password verify: </label>
         {editing ? (
-          <input
+          <input className= 'UserInfo input'
             type="text"
-            name="password"
+            name="checkpassword"
             value={editedData.checkpassword || ''}
             onChange={handleChange}
           />
         ) : (
-          <span>{userData.checkpassword}</span>
+          <span>{userData.password}</span>
         )}
-      </div> */}
-
-
-            
+      </div>
       <div>
         <label className='UserInfo label'>City: </label>
         {editing ? (
@@ -121,7 +201,7 @@ const UserInfo = () => {
         {editing ? (
           <input className= 'UserInfo input'
             type="text"
-            name="city"
+            name="country"
             value={editedData.country || ''}
             onChange={handleChange}
           />
@@ -172,28 +252,49 @@ const UserInfo = () => {
         )}
       </div>
 
-     {/*  <div>
-        <label>Age: </label>
+      <div>
+        <label className='UserInfo label'>phonenumber: </label>
         {editing ? (
-          <input
-            type="number"
-            name="age"
-            value={editedData.age || ''}
+          <input className= 'UserInfo input'
+            type="text"
+            name="phonenumber"
+            value={editedData.phonenumber || ''}
             onChange={handleChange}
           />
         ) : (
-          <span>{userData.age}</span>
+          <span>{userData.phonenumber}</span>
         )}
-      </div> */}
+      </div>
 
+      {currentUser.roles.includes("ROLE_USER") && (
+      <div>
+      <label className="UserInfo label">Tarif:</label>
+      {editing ? (
+    <select
+      className='UserInfo input'
+      name="tarif"
+      value={editedData.tarif || 'basic'}
+      onChange={handleChange}
+    >
+      {tarifOptions.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  ) : (
+    <span>{userData.tarif}</span>
+  )}
+      </div>
+ )}
       {editing ? (
         <button  className='UserInfo button' onClick={handleSave}>Save</button>
       ) : (
         <button className='UserInfo button' onClick={handleEdit}>Edit</button>
       )}
-
+  <ToastContainer />
     </div>
-  );
-};
+     
+    )};
 
 export default UserInfo;

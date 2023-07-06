@@ -1,20 +1,17 @@
-
-import'./Login.css';
+import "./Login.css";
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import AuthService from "../services/auth.service";
 
 const required = (value) => {
   if (!value) {
     return (
-      <div className="invalid-feedback d-block">
-        This field is required!
-      </div>
+      <div className="invalid-feedback d-block">This field is required!</div>
     );
   }
 };
@@ -33,7 +30,7 @@ const Login = () => {
   const handlePasswordToggle = () => {
     setPasswordVisible(!passwordVisible);
   };
-  
+
   const onChangeUsername = (e) => {
     const username = e.target.value;
     setUsername(username);
@@ -76,8 +73,9 @@ const Login = () => {
   };
 
   return (
-    <div className="col-md-12">
-      <div className="card card-container">
+    <div className="container_wrapper">
+      <div className= "container">
+      <div className="loginContainer">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
           alt="profile-img"
@@ -100,27 +98,26 @@ const Login = () => {
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <div className="password-input-wrapper">
-            <Input
-              type={passwordVisible ? 'text' : 'password'}
-              className="form-control password-input"
-              name="password"
-              value={password}
-              onChange={onChangePassword}
-            />
-            <button
-              type="button"
-              className="password-toggle-btn" 
-              onClick={handlePasswordToggle}
-            >
-              {passwordVisible ? (
-                <i className="fas fa-eye-slash"></i>
-              ) : (
-                <i className="fas fa-eye"></i>
-              )}
-            </button>
-          </div>
-             {/*  validations={[required]} */}
-           
+              <Input
+                type={passwordVisible ? "text" : "password"}
+                className="form-control password-input"
+                name="password"
+                value={password}
+                onChange={onChangePassword}
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={handlePasswordToggle}
+              >
+                {passwordVisible ? (
+                  <i className="fas fa-eye-slash"></i>
+                ) : (
+                  <i className="fas fa-eye"></i>
+                )}
+              </button>
+            </div>
+            {/*  validations={[required]} */}
           </div>
 
           <div className="form-group">
@@ -133,10 +130,13 @@ const Login = () => {
           </div>
 
           <div>
-            <Link style={{textDecoration:'none',
-              color:'red'}} to="/userprofilecheck">forgotten password?</Link>
+            <Link
+              style={{ textDecoration: "none", color: "red" }}
+              to="/Datuser-profile"
+            >
+              forgotten password?
+            </Link>
           </div>
-        
 
           {message && (
             <div className="form-group">
@@ -148,7 +148,8 @@ const Login = () => {
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
       </div>
-    </div>
+          </div>
+          </div>
   );
 };
 

@@ -14,16 +14,9 @@
     padding: 5px;
   }
   
-  .UserInfo button1 {
-    background-color: red;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+  
 
-  .UserInfo button2 {
+  .UserInfo button {
     background-color: rgb(153, 0, 255);
     color: rgb(255, 255, 255);
     padding: 5px 10px;

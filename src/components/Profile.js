@@ -6,36 +6,34 @@ import BoardUser from "./BoardUser";
 
 const Profile = () => {
   const currentUser = AuthService.getCurrentUser();
-  
 
-// Find the user by username
-const user =currentUser.username ;
+  // Find the user by username
+  const user = currentUser.username;
 
-// Check if the current user exists and has a username
+  // Check if the current user exists and has a username
 
   // Check the username and redirect to the corresponding page
-  if (currentUser && currentUser.roles && currentUser.roles.includes('ROLE_ADMIN')) {
-    return (
-      <BoardAdmin/>
-    );
-  } else if (currentUser && currentUser.roles && currentUser.roles.includes('ROLE_WORKER')) {
+  if (
+    currentUser &&
+    currentUser.roles &&
+    currentUser.roles.includes("ROLE_ADMIN")
+  ) {
+    return <BoardAdmin />;
+  } else if (
+    currentUser &&
+    currentUser.roles &&
+    currentUser.roles.includes("ROLE_WORKER")
+  ) {
     return <BoardModerator />;
-  } else if (currentUser && currentUser.roles && currentUser.roles.includes('ROLE_USER')) {
+  } else if (
+    currentUser &&
+    currentUser.roles &&
+    currentUser.roles.includes("ROLE_USER")
+  ) { 
+    console.log(localStorage.getItem("user"));
     return <BoardUser />;
-  }
-
-else{
-
-  return (
-    <div className="container">
-    no ------------
-  </div>
-  );
- 
-
-  
-
-;
-}
-}
+  } else {
+    return <div className="container"></div>;
+  } 
+};
 export default Profile;

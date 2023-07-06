@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Card.css';
 
-const Card = ({ name, image, category, description, linkUrl }) => {
+const Card = ({id,name, image, category,
+   description, city, actualStation, available }) => {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
 
   const handleClick = () => {
-    navigate(linkUrl);
+    navigate(`/buchung?image=${encodeURIComponent(image)}&category=${encodeURIComponent(category)}&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&actualStation=${encodeURIComponent(actualStation)}&city=${encodeURIComponent(city)}&available=${encodeURIComponent(available)}`);
   };
 
   const handleMouseEnter = () => {
@@ -34,9 +35,12 @@ const Card = ({ name, image, category, description, linkUrl }) => {
         <img className="card-image" src={image} alt={name} />
       </div>
       <div className="card-content">
+      {/* <h2 className="card-id">{id}</h2> */}
         <h2 className="card-name">{name}</h2>
         <h2 className="card-category">{category}</h2>
         <p className="card-description">{description}</p>
+        <h2 className="card-city">{city}</h2>
+        <h2 className="card-actualStation">{actualStation}</h2>
       </div>
     </div>
   );
