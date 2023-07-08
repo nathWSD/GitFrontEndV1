@@ -3,7 +3,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./background-image.css";
-import UserProfileCheck from "./components/UserProfileCheck";
+import ForgottenPassword from "./components/ForgottenPassword";
 import UserInfo from "./components/UserInfo";
 import AuthService from "./services/auth.service";
 import Login from "./components/Login";
@@ -139,7 +139,7 @@ const App = () => {
           <Route path="/BoardUser" element={<BoardUser/>} />
           <Route path="/BoardModerator" element={<BoardModerator/>} />
           <Route path="/BoardAdmin" element={<BoardAdmin/>} />
-          <Route exact path={"/userprofilecheck"} element={<UserProfileCheck />} />
+          <Route exact path={"/forgottenpassword"} element={<ForgottenPassword />} />
           <Route exact path={"/user-info"} element={<UserInfo />} />
           <Route exact path="/buchung" element={<Buchung />} />
           <Route exact path="/abrechnung" element={<Abrechnung />} />

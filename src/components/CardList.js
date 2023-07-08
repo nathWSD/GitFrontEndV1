@@ -19,22 +19,21 @@ const CardList =()=>{
       .catch(error => console.error('Error fetching car data:', error));
   }, []);
   
-
   const handleSearch = (selectedCity) => {
     let filteredCards = [];
   
     if (selectedCity === "all") {
-      filteredCards = cards; 
-      console.log(' car actualStation:',filteredCards.actualStation);
+      filteredCards = cards;
     } else {
-      filteredCards = cards.filter((card) => card.city.trim() === selectedCity.trim() && card.available === true);
+      filteredCards = cards.filter(
+        (card) => card.city.trim() === selectedCity.trim() && card.available === true
+      );
     }
   
     setFilteredCards(filteredCards);
   };
   
-  console.log('cards:', cards);
-  console.log('filteredCards:', filteredCards);
+  
   
   return (
     <div>

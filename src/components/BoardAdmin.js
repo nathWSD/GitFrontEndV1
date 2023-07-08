@@ -11,8 +11,12 @@ import {
   updateRoleByUsername,
   findCarById,
   getReservationById,
+  deleteReservation,
 } from "../services/AdminAccessService";
 import "./BoardAdmin.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./Tabledesign.css"
 
 const BoardAdmin = () => {
   const [selectedOption, setSelectedOption] = useState("");
@@ -37,6 +41,8 @@ const BoardAdmin = () => {
   const [reservationId, setReservationId] = useState("");
   const [reservationData, setReservationData] = useState(null);
   const [showReservationDataByID, setShowReservationDataByID] = useState(false);
+  const [showTable, setShowTable] = useState(false); // State variable to track table visibility
+  const [reservationDeleteId, setReservationDeleteId] = useState("");
 
   const handleSearchCars = async () => {
     try {
@@ -66,7 +72,6 @@ const BoardAdmin = () => {
       const token = currentUser.token;
       const userData = await searchUserByUsername(username, token);
       // Handle the retrieved user data
-      console.log(userData);
     } catch (error) {
       console.error("Error searching user:", error);
       // Handle the error
@@ -76,26 +81,18 @@ const BoardAdmin = () => {
   const fetchAllUsers = async () => {
     const token = currentUser.token;
     try {
-      const response = await getAllUsers(0, 20, "username", "asc", token);
-      const usersArray = response.users; // Access the users array
-      setUsers(usersArray);
+      if (showTable) {
+        setShowTable(false);
+        setUsers([]);
+      } else {
+        // If the table is not visible, fetch the users and show the table
+        const response = await getAllUsers(0, 20, "username", "asc", token);
+        const usersArray = response.users; // Access the users array
+        setUsers(usersArray);
+        setShowTable(true);
+      }
     } catch (error) {
       console.error("Error fetching all users:", error);
-    }
-  };
-
-  const handleDeleteReservation = async (reservationId) => {
-    // Make an API call to delete the reservation
-    try {
-      await fetch(`/api/reservations/${reservationId}`, {
-        method: "DELETE",
-      });
-      // Remove the deleted reservation from the state
-      setReservations(
-        reservations.filter((reservation) => reservation.id !== reservationId)
-      );
-    } catch (error) {
-      console.error("Error deleting reservation:", error);
     }
   };
 
@@ -166,21 +163,49 @@ const BoardAdmin = () => {
     }
   }, [showReservations]);
 
-
   const handleFindReservation = async () => {
     try {
       const token = currentUser.token;
-      const data = await getReservationById(Number(reservationId), token);
-      setReservationData(data);
-      setShowReservationDataByID(true);
+
+      // If reservation data is already shown, hide it
+      if (showReservationDataByID) {
+        setShowReservationDataByID(false);
+        setReservationData(null); // Reset reservation data
+      } else {
+        const data = await getReservationById(Number(reservationId), token);
+
+        if (data && data.reservation) {
+          // Reservation data found
+          toast.success("Reservation found");
+          setReservationData(data.reservation);
+          console.log("This is reservation by id", data.reservation);
+          setShowReservationDataByID(true);
+        } else {
+          toast.error("Reservation not found");
+          // Reservation data not found or null
+          setReservationData(null); // Reset reservation data
+          setShowReservationDataByID(false);
+        }
+      }
     } catch (error) {
       console.error("Error fetching reservation:", error);
       setReservationData(null); // Reset reservation data if an error occurs
       setShowReservationDataByID(false);
-
     }
   };
-  
+
+  const handleDeleteReservation = async () => {
+    const token = currentUser.token;
+    console.log("delete token", token);
+    try {
+      const response = await deleteReservation(reservationDeleteId);
+      console.log("Reservation deleted successfully:", response);
+      toast("Reservation deleted successfully.", { autoClose: 2000 });
+    } catch (error) {
+      console.error("Error deleting reservation:", error);
+      toast("Error deleting reservation.", { autoClose: 2000 });
+    }
+  };
   return (
     <div className="board-admin">
       <div className="column column-left">
@@ -191,34 +216,31 @@ const BoardAdmin = () => {
           </h3>
         </header>
         <img
-          class="profilbild"
+          className="profilbild"
           src="https://previews.123rf.com/images/sarahdesign/sarahdesign1504/sarahdesign150403820/38808571-my-account-icon.jpg"
           width="300"
           height="300"
         ></img>
+
         <p>
-          <p>
-            <strong>Id:</strong> {currentUser.id}
-          </p>
-
-          <p>
-            <strong>Email:</strong> {currentUser.email}
-          </p>
-          <p>
-            <strong>Firstname:</strong> {currentUser.firstname}
-          </p>
-          <p>
-            <strong>Surname:</strong> {currentUser.surname}
-          </p>
-
-          <strong>Authorities:</strong>
-          <ul>
-            {currentUser.roles &&
-              currentUser.roles.map((role, index) => (
-                <li key={index}>{role}</li>
-              ))}
-          </ul>
+          <strong>Id:</strong> {currentUser.id}
         </p>
+
+        <p>
+          <strong>Email:</strong> {currentUser.email}
+        </p>
+        <p>
+          <strong>Firstname:</strong> {currentUser.firstname}
+        </p>
+        <p>
+          <strong>Surname:</strong> {currentUser.surname}
+        </p>
+
+        <strong>Authorities:</strong>
+        <ul>
+          {currentUser.roles &&
+            currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
+        </ul>
 
         <div>
           <Link
@@ -230,13 +252,182 @@ const BoardAdmin = () => {
         </div>
       </div>
 
-      <div className="column column-right">
+
+      <div >
+
+        <div >
+          <p>
+            <strong> User Administration </strong>
+          </p>
+
+          <div>
+            <button onClick={fetchAllUsers}>Fetch All Users</button>
+
+            <div>
+              <table className = "UserTable">
+              <thead>
+                  <tr>
+                  <th>id</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>firstname</th>
+                    <th>Surname</th>
+                    <th>Country</th>
+                    <th>City</th>
+                    <th>Street Name and Number</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user) => (
+                    <tr key={user.id}>
+                      <td>{user.id}</td>
+                      <td>{user.username}</td>
+                      <td>{user.email}</td>
+                      <td>{user.firstname}</td>
+                      <td>{user.surname}</td>
+                      <td>{user.country}</td>
+                      <td>{user.city}</td>
+                      <td>{user.streetNameAndNumber}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="row">
+          <Link
+            style={{ textDecoration: "none", color: "blue" }}
+            to="/register"
+          >
+            create a new User
+          </Link>
+        </div>
+
+        </div>
+
+
+        <div className="row">
+          <div>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter username"
+            />
+            <button onClick={handleSearchUser}>Search</button>
+
+            {userDetails && (
+              <div>
+                <h3>User Details</h3>
+                <p>Username: {userDetails.username}</p>
+                <p>Email: {userDetails.email}</p>
+                <p>surname: {userDetails.surname}</p>
+                <p>city: {userDetails.city}</p>
+                <p>street Name and Number: {userDetails.streetNameAndNumber}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+
+
+      </div>
+
+      <div className="column-fullwidth">
+        <div>
+          <strong>Reservation Administration</strong>
+        </div>
+
+        <div>
+          <input
+            type="number"
+            min="1"
+            value={reservationDeleteId}
+            onChange={(e) => setReservationDeleteId(e.target.value)}
+          />
+          <button onClick={handleDeleteReservation} 
+           disabled={!reservationDeleteId}
+          >Delete Reservation</button>
+        </div>
+
+        <div>
+          <input
+            type="number"
+            min="1"
+            value={reservationId}
+            onChange={(e) => setReservationId(e.target.value)}
+            placeholder="Enter Reservation ID"
+          />
+          <button
+            onClick={handleFindReservation}
+            disabled={!reservationId} // Disable button when reservationId is empty
+          >
+            {showReservationDataByID
+              ? "Hide Reservation Data"
+              : "Show Reservation Data"}
+          </button>
+          {showReservationDataByID && reservationData && (
+            <div>
+              <h2>Reservation Data:</h2>
+              <p>Reservation ID: {reservationData.id}</p>
+              <p>
+                Reservation start Date: {reservationData.reservationDateStart}
+              </p>
+              <p>Reservation end Date: {reservationData.reservationDateEnd}</p>
+              <p>
+                Reservation Time start: {reservationData.reservationTimeStart}
+              </p>
+              <p>Reservation Time End: {reservationData.reservationTimeEnd}</p>
+              {reservationData.image && (
+                <img src={reservationData.image} alt="Car Image" />
+              )}
+
+              <ToastContainer />
+              {/* Add more reservation data properties here */}
+            </div>
+          )}
+
+          <button onClick={handleToggleReservations}>
+            {showReservations
+              ? "Hide all Reservations"
+              : "Show all Reservations"}
+          </button>
+          {showReservations &&
+            (isLoading ? (
+              <p>Loading reservations...</p>
+            ) : error ? (
+              <p>Error fetching reservations: {error.message}</p>
+            ) : findreservations.length === 0 ? (
+              <p>No reservations available.</p>
+            ) : (
+              <ul>
+                {findreservations.map((reservation) => (
+                  <li key={reservation.id}>
+                    <p>Username: {reservation.username}</p>
+                    <img src={reservation.image} alt="Car Image" />
+                    <p>Start Date: {reservation.reservationDateStart}</p>
+                    <p>Start Hour: {reservation.reservationTimeStart}</p>
+                    <p>End Date: {reservation.reservationDateEnd}</p>
+                    <p>End Hour: {reservation.reservationTimeEnd}</p>
+                    <p>Car ID: {reservation.carId}</p>
+                    <p>
+                      price: {reservation.price}
+                      {"\u20AC"}
+                    </p>
+                    <p>Station: {reservation.stationStart}</p>
+                  </li>
+                ))}
+              </ul>
+            ))}
+        </div>
+
         <div className="row">
           <p>
             <strong> Car Administration </strong>
           </p>
         </div>
-        <div className="row">
+      {/*   <div className="row">
           <div>
             <select value={selectedOption} onChange={handleFirstDropdownSelect}>
               <option value="">Select a City</option>
@@ -261,11 +452,12 @@ const BoardAdmin = () => {
               </select>
             )}
           </div>
-        </div>
+        </div> */}
 
-        <div className="row">
+        <div >
           <input
-            type="text"
+            type="number"
+            min="1"
             value={searchId}
             onChange={(e) => setSearchId(e.target.value)}
             placeholder="Enter card ID"
@@ -273,14 +465,17 @@ const BoardAdmin = () => {
           <button onClick={handleSearchCars}>Search</button>
 
           {searchResult && (
-            <div className="row row-result">
+            <div>
               <h3>Search Result</h3>
-              <p>Name: {searchResult.name}</p>
-              <img src={searchResult.image} alt={searchResult.name} />
-              <p>Category: {searchResult.category}</p>
-              <p>Description: {searchResult.description}</p>
-              <p>city: {searchResult.city}</p>
-              <p>actualstation: {searchResult.actualStation}</p>
+              <p>Name: {searchResult.vehicule.name}</p>
+              <img
+                src={searchResult.vehicule.image}
+                alt={searchResult.vehicule.name}
+              />
+              <p>Category: {searchResult.vehicule.category}</p>
+              <p>Description: {searchResult.vehicule.description}</p>
+              <p>City: {searchResult.vehicule.city}</p>
+              <p>Actual Station: {searchResult.vehicule.actualStation}</p>
             </div>
           )}
         </div>
@@ -298,61 +493,8 @@ const BoardAdmin = () => {
           </Link>
         </div>
 
-        <div className="row">
-          <p>
-            <strong> User Administration </strong>
-          </p>
-        </div>
+       
 
-        <div className="row">
-          <div>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter username"
-            />
-            <button onClick={handleSearchUser}>Search</button>
-
-            {userDetails && (
-              <div>
-                <h3>User Details</h3>
-                <p>Username: {userDetails.username}</p>
-                <p>Email: {userDetails.email}</p>
-                <p>surname: {userDetails.surname}</p>
-                <p>city: {userDetails.city}</p>
-                <p>street Name and Number: {userDetails.streetNameAndNumber}</p>
-              </div>
-            )}
-
-            {reservations.length > 0 && (
-              <div>
-                <h3>Reservations</h3>
-                {reservations.map((reservation) => (
-                  <div key={reservation.id}>
-                    <p>Reservation ID: {reservation.id}</p>
-                    <p>Date: {reservation.date}</p>
-                    <p>Time: {reservation.time}</p>
-                    <button
-                      onClick={() => handleDeleteReservation(reservation.id)}
-                    >
-                      Delete Reservation
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="row">
-          <button onClick={fetchAllUsers}>Fetch All Users</button>
-
-          <ul>
-            {users.map((user) => (
-              <li key={user.id}>{user.username}</li>
-            ))}
-          </ul>
-        </div>
         <div className="row">
           <input
             type="text"
@@ -364,81 +506,8 @@ const BoardAdmin = () => {
           </button>
           <div>{message}</div>
         </div>
-        <div className="row">
-          <Link
-            style={{ textDecoration: "none", color: "blue" }}
-            to="/register"
-          >
-            create a new User
-          </Link>
-        </div>
-
-        <div>
-        <input
-  type="number"
-  value={reservationId}
-  onChange={(e) => setReservationId(e.target.value)}
-  placeholder="Enter Reservation ID"
-/>
-<button
-  onClick={() => {
-    setReservationData(null);
-    setShowReservationDataByID(false);
-  }}
->
-  Clear Reservation Data
-</button>
+       
       </div>
-
-<div>
-{showReservationDataByID ? (
-  <div>
-    <h2>Reservation Data:</h2>
-    <p>Reservation ID: {reservationData?.reservationId}</p>
-    <p>Reservation Date: {reservationData?.reservationDate}</p>
-    {/* Add more reservation data properties here */}
-  </div>
-) : (
-  <p>No Reservation Data</p>
-)}
-
-</div>
-
-      </div>
-
-      <div class="row row-result">
-        <button onClick={handleToggleReservations}>
-          {showReservations ? "Hide Reservations" : "Show Reservations"}
-        </button>
-        {showReservations &&
-          (isLoading ? (
-            <p>Loading reservations...</p>
-          ) : error ? (
-            <p>Error fetching reservations: {error.message}</p>
-          ) : findreservations.length === 0 ? (
-            <p>No reservations available.</p>
-          ) : (
-            <ul>
-              {findreservations.map((reservation) => (
-                <div key={reservation.id}>
-                  <p>Username: {reservation.username}</p>
-                  <img src={reservation.image} alt="Car Image" />
-                  <p>Start Date: {reservation.reservationDateStart}</p>
-                  <p>Start Hour: {reservation.reservationTimeStart}</p>
-                  <p>End Date: {reservation.reservationDateEnd}</p>
-                  <p>End Hour: {reservation.reservationTimeEnd}</p>
-                  <p>Car ID: {reservation.carId}</p>
-                  <p>
-                    price: {reservation.price}
-                    {"\u20AC"}
-                  </p>
-                  <p>Station: {reservation.stationStart}</p>
-                </div>
-              ))}
-            </ul>
-          ))}
-      </div>
-
     </div>
   );
 };

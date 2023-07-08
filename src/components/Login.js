@@ -132,7 +132,7 @@ const Login = () => {
           <div>
             <Link
               style={{ textDecoration: "none", color: "red" }}
-              to="/Datuser-profile"
+              to="/forgottenpassword"
             >
               forgotten password?
             </Link>

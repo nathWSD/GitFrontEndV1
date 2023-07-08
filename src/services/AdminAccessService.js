@@ -1,6 +1,8 @@
 // AdminAccessService.js
 import axiosInstance from './axiosInstance';
-
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 export async function reservation(reservationData, token) {
   try {
@@ -11,7 +13,12 @@ export async function reservation(reservationData, token) {
     });
     return response.data;
   } catch (error) {
-    console.error('Error making reservation:', error);
+    if (error.response && error.response.status === 400) {
+      toast.error('Reservation not possible, car is reserved', { autoClose: 3000 });
+    } else {
+      console.error('Error making reservation:', error);
+      toast.error('An error occurred during the reservation process', { autoClose: 3000 });
+    }
     throw error;
   }
 }
@@ -83,6 +90,17 @@ export async function deleteUser(id, token) {
   }
 }
 
+export async function forgottenPassword(email, phonenumber) {
+  try {
+    const response = await axiosInstance.delete(`http://localhost:8080/lendmove/api/auth/forgottenPassword/${email}${phonenumber}`, {
+     
+    });
+    return response.data;
+  } catch (error) {
+    console.error('error reseting user data:', error);
+    throw error;
+  }
+}
   
 /* --------------------Reservation manipulation---------- */
 export async function getAllReservations(page = 0, size = 20, sortBy = 'id', sortDir = 'asc', token) {
@@ -124,18 +142,14 @@ export async function findByUserActivReservation(available, token) {
 
 
       
-
-export async function deleteReservation(reservation, token) {
+export async function deleteReservation(id, token) {
   try {
-    const response = await axiosInstance.post('http://localhost:8080/lendmove/api/auth/reservation/delete', reservation, 
-      reservation,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axiosInstance.delete('http://localhost:8080/lendmove/api/auth/reservation/delete', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      data: { id }
+    });
     return response.data;
   } catch (error) {
     console.error('Error deleting reservation:', error);
@@ -161,19 +175,25 @@ export async function getReservationById(id, token) {
       
 /* ------------------------------Cars Interactions----------------------------- */
 
-export async function findCarById(id, token) {
+export const findCarById = async (carId, token) => {
   try {
-    const response = await axiosInstance.get(`http://localhost:8080/lendmove/api/auth/vehicule/${id}`, {
-      headers: {
+    const response = await axiosInstance.get(`http://localhost:8080/lendmove/api/auth/vehicule/${carId}`, {      headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    console.log("Response from findCarById:", response.data); // Add this line
+
     return response.data;
   } catch (error) {
-    console.error('Error finding car by ID:', error);
-    throw error;
+    if (error.response && error.response.status === 404) {
+      return null;
+    } else {
+      throw error;
+    }
   }
-}
+};
+
 
       
       export async function addVehicle(vehiculeRequest, token) {
@@ -191,7 +211,53 @@ export async function findCarById(id, token) {
         }
       };
       
+      /* ------------------------------Payment Options----------------------------- */
+
+   
+      export async function PayPalPayment(PaypalResquest, token) {
+        try {
+          const response = await axiosInstance.post('http://localhost:8080/lendmove/api/auth/payment/paypal', PaypalResquest, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          return response.data;
+        } catch (error) {
+          console.error('Error adding vehicle:', error);
+          throw error;
+        }
+      };
       
-    
+
+      export async function BankPayment(BankResquest, token) {
+        try {
+          const response = await axiosInstance.post('http://localhost:8080/lendmove/api/auth/payment/bank', BankResquest, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          return response.data;
+        } catch (error) {
+          console.error('Error adding vehicle:', error);
+          throw error;
+        }
+      };
+
+      export async function CreditCardPayment(CreditCardResquest, token) {
+        try {
+          const response = await axiosInstance.post('http://localhost:8080/lendmove/api/auth/payment/creditcard', CreditCardResquest, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          return response.data;
+        } catch (error) {
+          console.error('Error adding vehicle:', error);
+          throw error;
+        }
+      };
       
       

@@ -316,7 +316,7 @@ const Register = (props) => {
                       className="form-control"
                       name="birthday"
                       value={birthday}
-                      defaultValue="yyyy-mm-dd" // Set the default value here
+                    
                       aria-describedby="button-addon2"
                       onChange={onChangebirthday}
                       validations={[vbirthday]}

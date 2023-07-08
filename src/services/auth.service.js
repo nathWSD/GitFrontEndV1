@@ -74,11 +74,17 @@ const login = (username, password) => {
 };
 
 
-const logout = () => { 
-  localStorage.removeItem("user");
-  return axios.post(API_URL + "signout").then((response) => {
-    return response.data;
-  });
+const logout = () => {
+  localStorage.removeItem('user');
+  return axios.post('http://localhost:8080/lendmove/api/auth/logout')
+    .then(response => {
+      // Handle successful logout
+      console.log('Logout successful');
+    })
+    .catch(error => {
+      // Handle error
+      console.error('Error during logout:', error);
+    });
 };
 
 const getCurrentUser = () => {
@@ -95,7 +101,6 @@ const reservation = (
   stationEnd,
   tarif
 ) => {
-  console.log(token)
   const token = localStorage.getItem("user").token;
   console.log(token)
   // Set the default Authorization header for all requests

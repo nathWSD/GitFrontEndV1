@@ -158,7 +158,7 @@ const UserInfo = () => {
         <label className='UserInfo label'>Password: </label>
         {editing ? (
           <input className= 'UserInfo input'
-            type="text"
+            type="password"
             name="password"
             value={editedData.password || ''}
             onChange={handleChange}
@@ -172,7 +172,7 @@ const UserInfo = () => {
         <label className='UserInfo label'>Password verify: </label>
         {editing ? (
           <input className= 'UserInfo input'
-            type="text"
+            type="password"
             name="checkpassword"
             value={editedData.checkpassword || ''}
             onChange={handleChange}

@@ -1,20 +1,99 @@
 import React, { useState } from 'react';
 import { useLocation } from "react-router-dom";
+import {
+  PayPalPayment,
+  BankPayment,
+  CreditCardPayment,
+} from "../services/AdminAccessService";
+import AuthService from '../services/auth.service';
 
 const Abrechnung = () => {
   const [selectedPaymentOption, setSelectedPaymentOption] = useState('');
+  /* -----------Credit card Payment----------- */
+  const [cardNumber, setcardNumber] = useState('');
+  const [expirationDate, setexpirationDate] = useState('');
+  const [cvv, setcvv] = useState('');
+
+  /* ---------Bank Payment------------------ */
+  const [bankAccountNumber, setbankAccountNumber] = useState('');
+  const [bankCode, setbankCode] = useState('');
+  const [accountHolderName, setaccountHolderName] = useState('');
+
+
+   /* ---------Paypal Payment------------------ */
+   const [paypalEmail, setpaypalEmail] = useState('');
+   const [paypalPassword, setpaypalPassword] = useState('');
+ 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const reservationId = searchParams.get("reservationId");
   const carId = searchParams.get("carId");
   const price = searchParams.get("price");
   const image =  searchParams.get("image");
+
+  const currentUser = AuthService.getCurrentUser();
+
   const handlePaymentOptionClick = (option) => {
     setSelectedPaymentOption(option);
   };
 
+
+  const handleCreditCardPayment = async () => {
+    // Handle credit card payment logic and send data to the backend
+    console.log("Credit Card Payment");
+    const DataCreditCard={cardNumber, expirationDate,cvv};
+    try {
+      const token = currentUser.token;
+      const paid = await CreditCardPayment(DataCreditCard, token);
+      // Handle the retrieved user data
+    } catch (error) {
+      console.error("Error with Bank payment:", error);
+    }
+  };
+
+  const handleBankTransferPayment = async () => {
+    console.log("Bank Transfer Payment");
+    const DataBankTransfer={bankAccountNumber, bankCode,accountHolderName};
+    try {
+      const token = currentUser.token;
+      const paid = await BankPayment(DataBankTransfer, token);
+      // Handle the retrieved user data
+    } catch (error) {
+      console.error("Error with Bank payment:", error);
+    }
+  };
+
+  const handlePayPalPayment = async () => {
+
+    const DataPaypal={paypalEmail, paypalPassword};
+
+    console.log("PayPal Payment");
+    try {
+      const token = currentUser.token;
+      const paid = await PayPalPayment(DataPaypal, token);
+      // Handle the retrieved user data
+    } catch (error) {
+      console.error("Error with paypal payment:", error);
+    }
+  };
+
+
   const handlePaymentSubmit = () => {
-    // Handle the payment submission logic
+    switch (selectedPaymentOption) {
+      case "credit_card":
+        handleCreditCardPayment();
+        break;
+      case "bank_transfer":
+        handleBankTransferPayment();
+        break;
+      case "paypal":
+        handlePayPalPayment();
+        break;
+      default:
+        // No payment option selected
+        console.log("No payment option selected");
+        break;
+    }
   };
 
   return (
@@ -48,16 +127,31 @@ const Abrechnung = () => {
             {/* For example: */}
             <label>
               Card Number:
-              <input type="text" name="cardNumber" />
+              <input type="text" 
+              name="cardNumber" 
+              value ={cardNumber}
+              onChange={(e)=>setcardNumber(e.target.value)}
+              />
             </label>
+
             <label>
               Expiration Date:
-              <input type="text" name="expirationDate" />
+              <input type="text" 
+              name="expirationDate" 
+              value={expirationDate}
+              onChange={(e)=>setexpirationDate(e.target.value)}
+              />
             </label>
+
             <label>
               CVV:
-              <input type="text" name="cvv" />
+              <input type="text" 
+              name="cvv" 
+              value={cvv}
+              onChange={(e)=>setcvv(e.target.value)}
+              />
             </label>
+
           </form>
         </div>
         <div
@@ -78,15 +172,28 @@ const Abrechnung = () => {
             {/* For example: */}
             <label>
               Bank Account Number:
-              <input type="text" name="bankAccountNumber" />
+              <input type="text" 
+              name="bankAccountNumber"
+              value={bankAccountNumber}
+              onChange={(e)=> setbankAccountNumber(e.target.value)}
+              />
             </label>
             <label>
               Bank Code:
-              <input type="text" name="bankCode" />
+              <input type="text" 
+              name="bankCode" 
+              value={bankCode}
+              onChange={(e)=> setbankCode(e.target.value)}
+              
+              />
             </label>
             <label>
               Account Holder Name:
-              <input type="text" name="accountHolderName" />
+              <input type="text" 
+              name="accountHolderName" 
+              value={accountHolderName}
+              onChange={(e)=> setaccountHolderName(e.target.value)}    
+              />
             </label>
           </form>
         </div>
@@ -108,11 +215,21 @@ const Abrechnung = () => {
             {/* For example: */}
             <label>
               PayPal Email:
-              <input type="email" name="paypalEmail" />
+              <input type="email" 
+              name="paypalEmail" 
+              value={paypalEmail}
+              onChange={(e)=> setpaypalEmail(e.target.value)}    
+              
+              />
             </label>
             <label>
               PayPal Password:
-              <input type="password" name="paypalPassword" />
+              <input type="password" 
+              name="paypalPassword" 
+              value={paypalPassword}
+              onChange={(e)=> setpaypalPassword(e.target.value)}    
+              
+              />
             </label>
           </form>
         </div>

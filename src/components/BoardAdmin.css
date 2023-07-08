@@ -13,9 +13,9 @@
 }
 
 .column-right {
-  background-color: lightgray;
+  order: 2;
+  align-self: flex-start; /* Set align-self to flex-start */
 }
-
 .row {
   display: flex;
   justify-content: space-between;
@@ -28,4 +28,14 @@
 
 .row-result {
   margin-top: 10px;
+}
+.row-result {
+  margin-top: 10px;
+  justify-content: center; /* Align content in the middle horizontally */
+}
+.column-fullwidth {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Add any additional styling as needed */
 }
