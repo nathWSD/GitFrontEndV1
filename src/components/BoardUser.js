@@ -7,7 +7,7 @@ import Buchung from "./Buchung";
 import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import {
-  findByUserActivReservation,
+  findByUserReservation,
   deleteReservation,
 } from "../services/AdminAccessService";
 
@@ -17,59 +17,69 @@ const BoardUser = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  /*   const selectedDetailsForUser = {
-    id: queryParams.get("id"),
-    name: queryParams.get("name"),
-    category: queryParams.get("category"),
-    image: queryParams.get("image"),
-    reservationDateStart: queryParams.get("reservationDateStart"),
-    reservationTimeStart: queryParams.get("reservationTimeStart"),
-    reservationDateEnd: queryParams.get("reservationDateEnd"),
-    reservationTimeEnd: queryParams.get("reservationTimeEnd"),
-    location: queryParams.get("location"),
-    actualStation: queryParams.get("actualStation"),
-  };
- */
 
-  /*  const queryParams = new URLSearchParams(location.search);
-  // Access the chosen card's information from URL parameters
-  const image = queryParams.get("image");
-  const name = queryParams.get("name");
-  const category = queryParams.get("category");
-  const id = queryParams.get("id"); */
+// Function to handle payment and update the paid status
+const handlePayment = (reservationId) => {
+  const updatedReservations = reservations.map((reservation) => {
+    if (reservation.id === reservationId) {
+      return {
+        ...reservation,
+        paid: true, // Set the paid status to true
+      };
+    }
+    return reservation;
+  });
+  setReservations(updatedReservations);
+};
 
-  const handlePayment = async () => {};
-
-  const handleFetchReservations = () => {
-    const token = currentUser.token;
-    setIsLoading(true);
-    setError(null); // Reset the error state before making the API call
-
-    findByUserActivReservation(false, token)
-      .then((response) => {
-        console.log("this is response", response);
-        const receivedReservations = response || []; // Handle the case when response is null or undefined
-        setReservations(receivedReservations);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message); // Set the error message in the state
-        setIsLoading(false);
-      });
-  };
-
-  const handleDeleteReservation = async (reservationId, token) => {
+  const handleFetchReservations = async () => {
     try {
-      // Find the reservation with the specified reservationId
+      const token = currentUser.token;
+      console.log("my token ---", token);
+      setIsLoading(true);
+      setError(null); // Reset the error state before making the API call
+  
+      findByUserReservation("activ", token)
+        .then((response) => {
+          console.log("this is response", response);
+          const receivedReservations = response.reservations || [];
+          const reservationsWithPaidStatus = receivedReservations.map((reservation) => ({
+            ...reservation,
+            paid: false, // Set the initial paid status to false
+          }));
+          setReservations(reservationsWithPaidStatus);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          setError(error.message);
+          setIsLoading(false);
+        });
+    } catch (error) {
+      setError(error.message);
+      setIsLoading(false);
+    }
+  };
+  
+
+
+  const handleDeleteReservation = async (reservationId, carId, token) => {
+    try {
+       // Find the reservation with the specified reservationId and carId
       const reservationToDelete = reservations.find(
-        (reservation) => reservation.id === reservationId
+        (reservation) => reservation.id === reservationId && reservation.carId === carId
       );
   
       if (reservationToDelete) {
-        await deleteReservation(reservationToDelete.id, token);
+        console.log("reservationToDelete id", reservationToDelete.id)
+      console.log("reservationToDelete carID" , reservationToDelete.carId)
+     
+        await deleteReservation(reservationToDelete.id, reservationToDelete.carId, token);
         // Remove the deleted reservation from the state
         setReservations(
-          reservations.filter((reservation) => reservation.id !== reservationId)
+          reservations.filter(
+            (reservation) =>
+              reservation.id !== reservationId || reservation.carId !== carId
+          )
         );
       } else {
         console.error("Reservation not found");
@@ -78,7 +88,6 @@ const BoardUser = () => {
       console.error("Error deleting reservation:", error);
     }
   };
-  
 
   return (
     <div className="BoardUser">
@@ -182,18 +191,20 @@ const BoardUser = () => {
                           <p>
                             Start and End Station: {reservation.stationStart}
                           </p>
-                          <button
-                            onClick={() =>
-                              handleDeleteReservation(reservation.id)
-                            }
-                          >
-                            Delete
-                          </button>
+                          <p style={{ color: reservation.paid ? "green" : "red" }}>
+                          Payment Status: {reservation.paid ? "Paid" : "Not Paid"}
+                           </p>
+                          <button onClick={() => handleDeleteReservation(parseInt(reservation.id), parseInt(reservation.carId))}>
+                              Delete
+                            </button>
                           <Link
                             to={`/abrechnung?reservationId=${reservation.id}&carId=${reservation.carId}&price=${reservation.price}&image=${reservation.image}`}
                           >
-                            <button>Payment</button>
-                          </Link>
+ {!reservation.paid && (
+              <button onClick={() => handlePayment(reservation.id)}>
+                Make Payment
+              </button>
+            )}                          </Link>
                         </div>
                       ))
                     )}

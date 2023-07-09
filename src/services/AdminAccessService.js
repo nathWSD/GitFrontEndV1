@@ -4,24 +4,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
-export async function reservation(reservationData, token) {
-  try {
-    const response = await axiosInstance.post(`http://localhost:8080/lendmove/api/auth` + "/reservation/make", reservationData, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    return response.data;
-  } catch (error) {
-    if (error.response && error.response.status === 400) {
-      toast.error('Reservation not possible, car is reserved', { autoClose: 3000 });
-    } else {
-      console.error('Error making reservation:', error);
-      toast.error('An error occurred during the reservation process', { autoClose: 3000 });
-    }
-    throw error;
-  }
-}
+
 
 /* -------------User and worker Manipulations--------------- */
 export async function getAllUsers(page = 0, size = 20, sortBy = 'username', sortDir = 'asc', token) {
@@ -118,44 +101,82 @@ export async function getAllReservations(page = 0, size = 20, sortBy = 'id', sor
 }
 
  
-
-export async function findByUserActivReservation(available, token) {
+export async function findByUserReservation(activ, token) {
   try {
     const response = await axiosInstance.get(
-      "http://localhost:8080/lendmove/api/auth/reservation/user/available",
+      "http://localhost:8080/lendmove/api/auth/reservation/user",
       {
         params: {
-          available: available // Set the 'activ' query parameter value
+          activ: activ // Set the 'activ' query parameter value
         },
         headers: {
           Authorization: `Bearer ${token}` // Include the Authorization header with the token
         }
       }
     );
-
-    return response.data.reservations; // Return the reservations data
-  } catch (error) {
-    console.error("Error fetching user reservations from  AdminAccessService:", error);
-    throw error; // Rethrow the error to handle it in the component
-  }
-}
-
-
-      
-export async function deleteReservation(id, token) {
-  try {
-    const response = await axiosInstance.delete('http://localhost:8080/lendmove/api/auth/reservation/delete', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      data: { id }
-    });
     return response.data;
   } catch (error) {
-    console.error('Error deleting reservation:', error);
+    console.error('Error fetching user reservations:', error);
     throw error;
   }
 }
+
+
+export async function reservation(reservationData, token) {
+  try {
+    const response = await axiosInstance.post(`http://localhost:8080/lendmove/api/auth` + "/reservation/make", reservationData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      toast.error('Reservation not possible, car is reserved', { autoClose: 3000 });
+    } else {
+      console.error('Error making reservation:', error);
+      toast.error('An error occurred during the reservation process', { autoClose: 3000 });
+    }
+    throw error;
+  }
+}
+
+export async function workerMakesReservation(reservationData, token) {
+  try {
+    const response = await axiosInstance.post(`http://localhost:8080/lendmove/api/auth` + "/reservation/workerMakeReservation", reservationData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      toast.error('Reservation not possible, car is reserved', { autoClose: 3000 });
+    } else {
+      console.error('Error making reservation:', error);
+      toast.error('An error occurred during the reservation process', { autoClose: 3000 });
+    }
+    throw error;
+  }
+}
+      /*--------- reservation id and car id---- */
+      export async function deleteReservation(id, carId, token) {
+        try {
+          const response = await axiosInstance.delete('http://localhost:8080/lendmove/api/auth/reservation/delete', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            data: { id, carId }
+          });
+          return response.data;
+        } catch (error) {
+          console.error('Error deleting reservation:', error);
+          throw error;
+        }
+      }
+      
+
+
 
 
 export async function getReservationById(id, token) {
@@ -216,7 +237,7 @@ export const findCarById = async (carId, token) => {
    
       export async function PayPalPayment(PaypalResquest, token) {
         try {
-          const response = await axiosInstance.post('http://localhost:8080/lendmove/api/auth/payment/paypal', PaypalResquest, {
+          const response = await axiosInstance.post('http://localhost:8080/lendmove/api/auth/reservation/paypalPayment', PaypalResquest, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
@@ -224,7 +245,7 @@ export const findCarById = async (carId, token) => {
           });
           return response.data;
         } catch (error) {
-          console.error('Error adding vehicle:', error);
+          console.error('Error paypal payment vehicle:', error);
           throw error;
         }
       };
@@ -232,7 +253,7 @@ export const findCarById = async (carId, token) => {
 
       export async function BankPayment(BankResquest, token) {
         try {
-          const response = await axiosInstance.post('http://localhost:8080/lendmove/api/auth/payment/bank', BankResquest, {
+          const response = await axiosInstance.post('http://localhost:8080/lendmove/api/auth/reservation/bankPayment', BankResquest, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
@@ -240,14 +261,14 @@ export const findCarById = async (carId, token) => {
           });
           return response.data;
         } catch (error) {
-          console.error('Error adding vehicle:', error);
+          console.error('Error bankpayment vehicle:', error);
           throw error;
         }
       };
 
       export async function CreditCardPayment(CreditCardResquest, token) {
         try {
-          const response = await axiosInstance.post('http://localhost:8080/lendmove/api/auth/payment/creditcard', CreditCardResquest, {
+          const response = await axiosInstance.post('http://localhost:8080/lendmove/api/auth/reservation/creditcard', CreditCardResquest, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
@@ -255,7 +276,7 @@ export const findCarById = async (carId, token) => {
           });
           return response.data;
         } catch (error) {
-          console.error('Error adding vehicle:', error);
+          console.error('Error creditcard vehicle:', error);
           throw error;
         }
       };

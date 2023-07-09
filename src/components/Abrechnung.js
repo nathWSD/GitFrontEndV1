@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { useLocation } from "react-router-dom";
-import {
-  PayPalPayment,
-  BankPayment,
-  CreditCardPayment,
-} from "../services/AdminAccessService";
+import { PayPalPayment, BankPayment, CreditCardPayment,} from "../services/AdminAccessService";
 import AuthService from '../services/auth.service';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+import {  useNavigate } from "react-router-dom";
 
 const Abrechnung = () => {
   const [selectedPaymentOption, setSelectedPaymentOption] = useState('');
@@ -30,7 +30,7 @@ const Abrechnung = () => {
   const carId = searchParams.get("carId");
   const price = searchParams.get("price");
   const image =  searchParams.get("image");
-
+  const navigate = useNavigate();
   const currentUser = AuthService.getCurrentUser();
 
   const handlePaymentOptionClick = (option) => {
@@ -53,7 +53,10 @@ const Abrechnung = () => {
 
   const handleBankTransferPayment = async () => {
     console.log("Bank Transfer Payment");
-    const DataBankTransfer={bankAccountNumber, bankCode,accountHolderName};
+    const DataBankTransfer={
+      bankAccountNumber : bankAccountNumber,
+      password: bankCode,
+      username : accountHolderName};
     try {
       const token = currentUser.token;
       const paid = await BankPayment(DataBankTransfer, token);
@@ -65,7 +68,8 @@ const Abrechnung = () => {
 
   const handlePayPalPayment = async () => {
 
-    const DataPaypal={paypalEmail, paypalPassword};
+    const DataPaypal={email:paypalEmail ,
+      password: paypalPassword };
 
     console.log("PayPal Payment");
     try {
@@ -78,22 +82,55 @@ const Abrechnung = () => {
   };
 
 
-  const handlePaymentSubmit = () => {
+  const handlePaymentSubmit = async () => {
     switch (selectedPaymentOption) {
       case "credit_card":
-        handleCreditCardPayment();
+        try {
+          await handleCreditCardPayment();
+          showPaymentSuccessToast();
+          navigateToCurrentUserPage();
+        } catch (error) {
+          console.error("Error with Credit Card payment:", error);
+          showPaymentErrorToast();
+        }
         break;
       case "bank_transfer":
-        handleBankTransferPayment();
+        try {
+          await handleBankTransferPayment();
+          showPaymentSuccessToast();
+          navigateToCurrentUserPage();
+        } catch (error) {
+          console.error("Error with Bank Transfer payment:", error);
+          showPaymentErrorToast();
+        }
         break;
       case "paypal":
-        handlePayPalPayment();
+        try {
+          await handlePayPalPayment();
+          showPaymentSuccessToast();
+          navigateToCurrentUserPage();
+        } catch (error) {
+          console.error("Error with PayPal payment:", error);
+          showPaymentErrorToast();
+        }
         break;
       default:
         // No payment option selected
         console.log("No payment option selected");
         break;
     }
+  };
+
+  const showPaymentSuccessToast = () => {
+    toast.success('Payment successful!', { autoClose: 4000 });
+  };
+
+  const showPaymentErrorToast = () => {
+    toast.error("Payment failed. Please try again.", { autoClose: 4000 });
+  };
+
+  const navigateToCurrentUserPage = () => {
+    navigate("/BoardUser")
   };
 
   return (
@@ -123,8 +160,6 @@ const Abrechnung = () => {
             />
           </div>
           <form style={{ pointerEvents: selectedPaymentOption === 'credit_card' ? 'auto' : 'none' }}>
-            {/* Add your form fields and inputs for credit card payment */}
-            {/* For example: */}
             <label>
               Card Number:
               <input type="text" 
@@ -172,7 +207,7 @@ const Abrechnung = () => {
             {/* For example: */}
             <label>
               Bank Account Number:
-              <input type="text" 
+              <input type="number" 
               name="bankAccountNumber"
               value={bankAccountNumber}
               onChange={(e)=> setbankAccountNumber(e.target.value)}
@@ -211,8 +246,7 @@ const Abrechnung = () => {
             />
           </div>
           <form style={{ pointerEvents: selectedPaymentOption === 'paypal' ? 'auto' : 'none' }}>
-            {/* Add your form fields and inputs for PayPal payment */}
-            {/* For example: */}
+        
             <label>
               PayPal Email:
               <input type="email" 
@@ -235,6 +269,8 @@ const Abrechnung = () => {
         </div>
       </div>
       <button onClick={handlePaymentSubmit}>Submit Payment</button>
+      <ToastContainer />
+
     </div>
   );
 };

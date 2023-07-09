@@ -22,7 +22,7 @@ import Abrechnung from "./components/Abrechnung";
 import EventBus from "./common/EventBus";
 import TermsAndPolicy from "./components/TermsAndPolicy";
 import CreateCar from "./components/CreateCar";
-
+import Kontakt from "./components/Kontakt";
 
 const App = () => {
   //const [showAdminBoard, setShowAdminBoard] = useState(false);
@@ -88,6 +88,12 @@ const App = () => {
             </Link>
           </li>
 
+          <li className="nav-item4">
+            <Link to={"/Kontakt"} className="nav-link">
+              Contact
+            </Link>
+          </li>
+
           <li className="nav-item5">
             <Link to={"/termsandpolicy"} className="nav-link">
               Terms and policy
@@ -133,6 +139,8 @@ const App = () => {
           <Route exact path={"/tarif"} element={<Tarif />} />
           <Route exact path="/Fahrzeuge" element={<Fahrzeuge />} />
           <Route exact path={"/UeberLendMove"} element={<UeberLendMove />} />
+          <Route exact path="/Kontakt" element={<Kontakt />} />
+
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/profile" element={<Profile />} />
@@ -142,8 +150,8 @@ const App = () => {
           <Route exact path={"/forgottenpassword"} element={<ForgottenPassword />} />
           <Route exact path={"/user-info"} element={<UserInfo />} />
           <Route exact path="/buchung" element={<Buchung />} />
-          <Route exact path="/abrechnung" element={<Abrechnung />} />
-          <Route exact path="/createCar" element={<CreateCar />} />
+          <Route exact path="/abrechnung" element={<Abrechnung />}/>
+          < Route exact path="/createCar" element={<CreateCar />}/>
         </Routes>
       </div>
     </div>

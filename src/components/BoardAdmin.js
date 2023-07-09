@@ -16,7 +16,7 @@ import {
 import "./BoardAdmin.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./Tabledesign.css"
+import "./Tabledesign.css";
 
 const BoardAdmin = () => {
   const [selectedOption, setSelectedOption] = useState("");
@@ -43,6 +43,7 @@ const BoardAdmin = () => {
   const [showReservationDataByID, setShowReservationDataByID] = useState(false);
   const [showTable, setShowTable] = useState(false); // State variable to track table visibility
   const [reservationDeleteId, setReservationDeleteId] = useState("");
+  const [carIdToDelete, setcarIdToDelete] = useState("");
 
   const handleSearchCars = async () => {
     try {
@@ -198,7 +199,10 @@ const BoardAdmin = () => {
     const token = currentUser.token;
     console.log("delete token", token);
     try {
-      const response = await deleteReservation(reservationDeleteId);
+      const response = await deleteReservation(
+        reservationDeleteId,
+        carIdToDelete
+      );
       console.log("Reservation deleted successfully:", response);
       toast("Reservation deleted successfully.", { autoClose: 2000 });
     } catch (error) {
@@ -252,10 +256,8 @@ const BoardAdmin = () => {
         </div>
       </div>
 
-
-      <div >
-
-        <div >
+      <div>
+        <div>
           <p>
             <strong> User Administration </strong>
           </p>
@@ -264,10 +266,10 @@ const BoardAdmin = () => {
             <button onClick={fetchAllUsers}>Fetch All Users</button>
 
             <div>
-              <table className = "UserTable">
-              <thead>
+              <table className="UserTable">
+                <thead>
                   <tr>
-                  <th>id</th>
+                    <th>id</th>
                     <th>Username</th>
                     <th>Email</th>
                     <th>firstname</th>
@@ -296,16 +298,14 @@ const BoardAdmin = () => {
           </div>
 
           <div className="row">
-          <Link
-            style={{ textDecoration: "none", color: "blue" }}
-            to="/register"
-          >
-            create a new User
-          </Link>
+            <Link
+              style={{ textDecoration: "none", color: "blue" }}
+              to="/register"
+            >
+              create a new User
+            </Link>
+          </div>
         </div>
-
-        </div>
-
 
         <div className="row">
           <div>
@@ -329,9 +329,6 @@ const BoardAdmin = () => {
             )}
           </div>
         </div>
-
-
-
       </div>
 
       <div className="column-fullwidth">
@@ -343,12 +340,23 @@ const BoardAdmin = () => {
           <input
             type="number"
             min="1"
+            placeholder="reservation Id for deleting"
             value={reservationDeleteId}
             onChange={(e) => setReservationDeleteId(e.target.value)}
           />
-          <button onClick={handleDeleteReservation} 
-           disabled={!reservationDeleteId}
-          >Delete Reservation</button>
+          <input
+            type="number"
+            min="1"
+            placeholder="Car Id for deleting"
+            value={carIdToDelete}
+            onChange={(e) => setcarIdToDelete(e.target.value)}
+          />
+          <button
+            onClick={handleDeleteReservation}
+            disabled={!reservationDeleteId || !carIdToDelete}
+          >
+            Delete Reservation
+          </button>
         </div>
 
         <div>
@@ -404,8 +412,9 @@ const BoardAdmin = () => {
               <ul>
                 {findreservations.map((reservation) => (
                   <li key={reservation.id}>
-                    <p>Username: {reservation.username}</p>
                     <img src={reservation.image} alt="Car Image" />
+                    <p>Username: {reservation.username}</p>
+                    <p>reservation Id: {reservation.id}</p>
                     <p>Start Date: {reservation.reservationDateStart}</p>
                     <p>Start Hour: {reservation.reservationTimeStart}</p>
                     <p>End Date: {reservation.reservationDateEnd}</p>
@@ -427,7 +436,7 @@ const BoardAdmin = () => {
             <strong> Car Administration </strong>
           </p>
         </div>
-      {/*   <div className="row">
+        {/*   <div className="row">
           <div>
             <select value={selectedOption} onChange={handleFirstDropdownSelect}>
               <option value="">Select a City</option>
@@ -454,7 +463,7 @@ const BoardAdmin = () => {
           </div>
         </div> */}
 
-        <div >
+        <div>
           <input
             type="number"
             min="1"
@@ -493,20 +502,17 @@ const BoardAdmin = () => {
           </Link>
         </div>
 
-       
-
         <div className="row">
           <input
             type="text"
             value={usernameRoleChange}
             onChange={(e) => setusernameRoleChange(e.target.value)}
           />
-          <button onClick={handleUpdateRole}>
+          <button onClick={handleUpdateRole} disabled={!usernameRoleChange}>
             Search and Update user Role
           </button>
           <div>{message}</div>
         </div>
-       
       </div>
     </div>
   );

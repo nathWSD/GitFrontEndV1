@@ -10,7 +10,7 @@ import CheckButton from "react-validation/build/button";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import { reservation } from "../services/AdminAccessService";
+import { reservation, workerMakesReservation } from "../services/AdminAccessService";
 
 const Buchung = () => {
   const [reservationDateStart, setreservationDateStart] = useState("");
@@ -22,8 +22,11 @@ const Buchung = () => {
   const [actualStation, setActualStation] = useState("");
   const [image, setImage] = useState("");
 
-  const currentDateTime = moment();
+  /* ---username to be given by worker for reservation of user--- */
+  const [username , setUsername]=useState("");
 
+  const currentDateTime = moment();
+  const currentUser =AuthService.getCurrentUser();
   const queryParams = new URLSearchParams(window.location.search);
   // Access the chosen card's information from URL parameters
   const category = queryParams.get("category");
@@ -48,78 +51,84 @@ const Buchung = () => {
   const stationStart = city + "-" + actualStation;
   const stationEnd = city + "-" + actualStation;
 
+/*   
   const isButtonDisabled =
-    !city ||
-    !reservationDateStart ||
-    !reservationTimeStart ||
-    (firstSelectionMade && (!reservationDateEnd || !reservationTimeEnd)) ||
-    (!firstSelectionMade && (reservationDateEnd || reservationTimeEnd));
-   
-    
-  const handleReservationButtonClick = async () =>{
+  !city ||
+  !reservationDateStart ||
+  !reservationTimeStart ||
+  (firstSelectionMade && (!reservationDateEnd || !reservationTimeEnd)) ||
+  (!firstSelectionMade && (reservationDateEnd || reservationTimeEnd));
+  */
+  const isButtonDisabled =
+  !city ||
+  !reservationDateStart ||
+  !reservationTimeStart ||
+  ((currentUser && currentUser.roles.includes("ROLE_WORKER")) && !username) ||
+  (firstSelectionMade && (!reservationDateEnd || !reservationTimeEnd)) ||
+  (!firstSelectionMade && (reservationDateEnd || reservationTimeEnd));
+  
+  const handleReservationButtonClick = async () => {
     const currentUser = AuthService.getCurrentUser();
-
-    if ( isLoggedIn ||(currentUser && currentUser.roles.includes("ROLE_USER"))) 
-    {
-      console.log(localStorage.getItem("user").token);
-
-      const tarif =  currentUser.tarif;
-
+  
+    if (isLoggedIn || currentUser) {
+  
       const selectedCardDetails = {
-        /*  image, */ /* need to add image  */ 
         reservationDateStart: reservationDateStart,
         reservationDateEnd: reservationDateEnd,
         reservationTimeStart: reservationTimeStart,
         reservationTimeEnd: reservationTimeEnd,
-        //from car
         carId: carId,
-      stationStart: stationStart,
-      stationEnd: stationEnd,
-      tarif: tarif, // from userdata
-      image : image,
+        stationStart: stationStart,
+        stationEnd: stationEnd,
+/*         tarif: tarif,
+ */        image: image,
+        /* ----conditional add of username incase worker makes reservation--- */
+        ...(currentUser.roles.includes("ROLE_WORKER") && { username: username }),
       };
-
+  
       const selectedDetailsForUser = {
-      //for car from DB
         id: id,
         name: name,
         category: category,
         image: image,
-     
-        // Add any additional item details as needed
         reservationDateStart: reservationDateStart,
         reservationTimeStart: reservationTimeStart,
         reservationDateEnd: reservationDateEnd,
         reservationTimeEnd: reservationTimeEnd,
         location: city,
         actualStation: actualStation,
-        tarif : tarif,
-        carId : carId,
-       
+    /*     tarif: tarif, */
+        carId: carId,
       };
+  
       const token = currentUser.token;
-       await reservation(selectedCardDetails , token)
-      .then((response) => {
-        toast(' reservation success .', { autoClose: 2000 });
-
-        console.log("sucess registration", response.price)
-       
-       navigate("/BoardUser", { state: selectedDetailsForUser });
-       
-      })
-      .catch((error) => {
-        console.log("reserving error")
-        console.log("Reservation error:", error);
-      });
-
-     
-
+  
+      if (currentUser.roles.includes("ROLE_USER")) {
+        await reservation(selectedCardDetails, token)
+          .then((response) => {
+            toast('Reservation success.', { autoClose: 2000 });
+            navigate("/BoardUser", { state: selectedDetailsForUser });
+          })
+          .catch((error) => {
+            console.error("Reservation error:", error);
+          });
+      } else if (currentUser.roles.includes("ROLE_WORKER")) {
+        await workerMakesReservation(selectedCardDetails, token)
+          .then((response) => {
+            toast('Reservation success (Worker).', { autoClose: 2000 });
+            navigate("/BoardModerator");
+          })
+          .catch((error) => {
+            console.error("Worker reservation error:", error);
+          });
+      } else {
+        toast('You must log in as a user or worker before reserving.', { autoClose: 3000 });
+      }
     } else {
-      toast('You must log in as user before reserving.', { autoClose: 2000 });
-    } 
-   
+      toast('You must log in before reserving.', { autoClose: 3000 });
+    }
   };
-
+  
   const availableDays = [];
   const availableHours = [];
 
@@ -249,7 +258,18 @@ const Buchung = () => {
         </div>
         <div className="row"></div>
 
-        <div className="row">Row 5 Content</div>
+        <div className="row">  
+         {currentUser && currentUser.roles.includes("ROLE_WORKER") && (
+      <div className="row">
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+      </div>
+    )}</div>
       </div>
       <ToastContainer />
     </div>

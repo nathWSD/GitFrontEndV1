@@ -96,8 +96,6 @@ const vcountry = (value) => {
   }
 };
 
-
-
 const vpassword = (value) => {
   if (value.length < 6 || value.length > 40) {
     return (
@@ -108,17 +106,7 @@ const vpassword = (value) => {
   }
 };
 
-const vcheckpassword = (value) => {
-  const passwordValidation = vpassword(value); // Invoke vpassword function to get the validation result
-  if (passwordValidation) {
-    return (
-      <div className="invalid-feedback d-block">The password must be same.</div>
-    );
-  }
-};
-
-
-const Register = (props) => {
+const Register = React.memo((props) => {
   const form = useRef();
   const checkBtn = useRef();
 
@@ -134,11 +122,20 @@ const Register = (props) => {
   const [country, setcountry] = useState("");
   const [streetNameAndNumber, setstreetNameAndNumber] = useState("");
   const [phonenumber, setphonenumber] = useState("");
-  const [tarif, settarif] = useState(""); // State to store the selected option
+  const [tarif, settarif] = useState("basic"); // State to store the selected option
+  const [passwordError, setPasswordError] = useState("");
 
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+
+  const vcheckpassword = (value) => {
+    if (password && value !== password) {
+      return (
+        <div className="invalid-feedback d-block">Passwords don't match.</div>
+      );
+    }
+  };
 
   const handleTarifChange = (event) => {
     const tarif = event.target.value;
@@ -220,6 +217,11 @@ const Register = (props) => {
   const handleRegister = (e) => {
     e.preventDefault();
 
+    // Perform the password validation
+    if (password !== checkpassword) {
+      setPasswordError("Passwords don't match.");
+      return;
+    }
     setMessage("");
     setSuccessful(false);
 
@@ -244,10 +246,10 @@ const Register = (props) => {
         (response) => {
           setTimeout(() => {
             setSuccessful(true);
-            setMessage('Registration successful. Redirecting to login page...');
-      
+            setMessage("Registration successful. Redirecting to login page...");
+
             setTimeout(() => {
-              navigate('/login');
+              navigate("/login");
             }, 2000);
           }, 2000);
         },
@@ -316,7 +318,6 @@ const Register = (props) => {
                       className="form-control"
                       name="birthday"
                       value={birthday}
-                    
                       aria-describedby="button-addon2"
                       onChange={onChangebirthday}
                       validations={[vbirthday]}
@@ -446,7 +447,7 @@ const Register = (props) => {
                   name="password"
                   value={password}
                   onChange={onChangePassword}
-                  validations={[required, vpassword]}
+                  required
                 />
               </div>
 
@@ -458,8 +459,13 @@ const Register = (props) => {
                   name="checkpassword"
                   value={checkpassword}
                   onChange={onChangecheckPassword}
-                  validations={[required, vcheckpassword]}
+                  required
                 />
+                {passwordError && (
+                  <div className="invalid-feedback d-block">
+                    {passwordError}
+                  </div>
+                )}
               </div>
 
               <div className="form-group">
@@ -485,6 +491,6 @@ const Register = (props) => {
       </div>
     </div>
   );
-};
+});
 
 export default Register;

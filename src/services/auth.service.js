@@ -184,8 +184,22 @@ const changePersonalData = (
 
 
 
+const ResetPersonalData = ( 
+  username,
+  email,
+  password,
+  phonenumber,
+  checkpassword,
+    ) => {
 
-
+  return axios.post(API_URL + "reset", {
+    username,
+    email,
+    password,
+    phonenumber,  
+    checkpassword,
+    });
+};
 
 const AuthService = {
   register,
@@ -194,6 +208,7 @@ const AuthService = {
   getCurrentUser,
   reservation,
   changePersonalData,
+  ResetPersonalData,
 }
 
 export default AuthService;

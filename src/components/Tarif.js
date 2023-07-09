@@ -1,56 +1,43 @@
-import React from 'react';
+import React from "react";
+import "../tarif.css";
 
 const Tarif = () => {
   return (
-    <div class="contenair">
-      <header link rel='stylesheet' href="tarif.css">
-      <video autoPlay loop muted playsInline class="video">
-        <source url='https://cdn.create.vista.com/api/media/medium/93280772/stock-video-happy-couple-driving-on-country?token=' type='video/mp4'/>
-
-      </video>
-      <h1>Tarif</h1>
+    <div class="tarif-container">
+      <h1>
+        <b>Unsere Tarife</b>
+      </h1>
       <hr />
-      <h3>Basis</h3>
-      <br />
-      <table>
-        <tr>
-          <th>Tarif</th>
-          <th>Tarifverstrag pro Monat</th>
-        </tr>
-
-        <tr>
-          <td>Basis</td>
-          <td>ab 109€</td>
-        </tr>
-        <p>Sie zahlen nur, wenn Sie Auto fahren. Keine Grundgebühr.</p>
+      <ul>
+        <li style={{ color: "turquoise" }}>
+          <b>Basis</b>
+        </li>
+        <p style={{ color: "turquoise" }}>
+          <b>You only pay when you drive. No basic fee.</b>
+        </p>
         <hr />
-        <h3>Aktiv</h3>
-        <tr>
-          <th>Tarif</th>
-          <th>Tarifverstrag pro Monat</th>
-        </tr>
 
-        <tr>
-          <td>Aktiv</td>
-          <td>ab 200€</td>
-        </tr>
-        <p>Für fast alle.</p>
-        <p>Optionale für 60-250km pro Monat. Ob Einkauf oder Kurztrip.</p>
+        <li style={{ color: "turquoise" }}>
+          <b>Normal</b>
+        </li>
+        <p style={{ color: "turquoise" }}>
+          <b>for almost everyone</b>
+        </p>
+        <p style={{ color: "turquoise" }}>
+          <b>optional for 60-250km per month. Whether shopping or a short trip</b>
+        </p>
         <hr />
-        <h3>Komfort</h3>
-        <tr>
-          <th>Tarif</th>
-          <th>Tarifverstrag pro Monat</th>
-        </tr>
 
-        <tr>
-          <td>Komfort</td>
-          <td>ab 350€</td>
-        </tr>
-        <p>Für Vielfahrende.</p>
-        <p>Günstigere Kilometerpreise. Für häufige oder lange Fahrten.</p>
-      </table>
-      </header>
+        <li style={{ color: "turquoise" }}>
+          <b>exclusiv</b>
+        </li>
+        <p style={{ color: "turquoise" }}>
+          <b>For very active driving</b>
+        </p>
+        <p style={{ color: "turquoise" }}>
+          <b>  </b>
+        </p>
+      </ul>
     </div>
   );
 };

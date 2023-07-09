@@ -8,7 +8,6 @@ const Profile = () => {
   const currentUser = AuthService.getCurrentUser();
 
   if (currentUser) {
-    // Check if the user object and username property exist
     const username = currentUser.username;
 
     if (username) {
@@ -23,7 +22,6 @@ const Profile = () => {
         currentUser.roles &&
         currentUser.roles.includes("ROLE_USER")
       ) {
-        console.log(localStorage.getItem("user"));
         return <BoardUser />;
       }
     }

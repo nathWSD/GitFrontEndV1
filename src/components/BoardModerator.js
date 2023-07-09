@@ -43,6 +43,7 @@ const BoardModerator = () => {
   const [showTable, setShowTable] = useState(false); // State variable to track table visibility
 
   const [reservationDeleteId, setReservationDeleteId] = useState("");
+  const [carIdToDelete, setcarIdToDelete] = useState("");
 
   const handleSearchCars = async () => {
     try {
@@ -189,7 +190,7 @@ const BoardModerator = () => {
     const token = currentUser.token;
     console.log("delete token", token);
     try {
-      const response = await deleteReservation(reservationDeleteId);
+      const response = await deleteReservation(reservationDeleteId,carIdToDelete);
       console.log("Reservation deleted successfully:", response);
       toast("Reservation deleted successfully.", { autoClose: 2000 });
     } catch (error) {
@@ -285,7 +286,7 @@ const BoardModerator = () => {
               <table className = "UserTable">
                 <thead>
                   <tr>
-                  <th>id</th>
+                    <th>id</th>
                     <th>Username</th>
                     <th>Email</th>
                     <th>firstname</th>
@@ -386,9 +387,10 @@ const BoardModerator = () => {
             ) : (
               <ul>
                 {findreservations.map((reservation) => (
-                  <li key={reservation.id}>
-                    <p>Username: {reservation.username}</p>
+                  <li key={reservation.id}>  
                     <img src={reservation.image} alt="Car Image" />
+                    <p>Username: {reservation.username}</p>
+                    <p>reservation Id: {reservation.id}</p>
                     <p>Start Date: {reservation.reservationDateStart}</p>
                     <p>Start Hour: {reservation.reservationTimeStart}</p>
                     <p>End Date: {reservation.reservationDateEnd}</p>
@@ -403,20 +405,33 @@ const BoardModerator = () => {
                 ))}
               </ul>
             ))}
-          <div>
-            <input
-              type="number"
-              min="1"
-              value={reservationDeleteId}
-              onChange={(e) => setReservationDeleteId(e.target.value)}
-            />
-            <button
-              onClick={handleDeleteReservation}
-              disabled={!reservationDeleteId}
-            >
-              Delete Reservation
-            </button>
-          </div>
+           <div>
+          <input
+            type="number"
+            min="1"
+            placeholder="reservation Id for deleting"
+            value={reservationDeleteId}
+            onChange={(e) => setReservationDeleteId(e.target.value)}
+          />
+          <input
+            type="number"
+            min="1"
+            placeholder="Car Id for deleting"
+            value={carIdToDelete}
+            onChange={(e) => setcarIdToDelete(e.target.value)}
+          />
+          <button onClick={handleDeleteReservation} 
+           disabled={!reservationDeleteId || !carIdToDelete}
+          >Delete Reservation</button>
+        </div>
+
+          <Link
+            style={{ textDecoration: "none", color: "blue" }}
+            to="/Fahrzeuge"
+          >
+            make User reservation 
+          </Link>
+
         </div>
 
         <div >

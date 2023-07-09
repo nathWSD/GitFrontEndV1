@@ -1,0 +1,35 @@
+.germany-states {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    background-image: url('https://images.pexels.com/photos/1078850/pexels-photo-1078850.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+    background-size: cover;
+    background-position: auto;
+  }
+  
+  .state {
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: center;
+  }
+  
+  .state-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .cities-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .city {
+    margin-bottom: 5px;
+  }
+  
+  

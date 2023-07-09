@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import UserService from "../services/user.service";
+import '../HomePage.css';
+import React from "react";
+import SearchBar from "./Searchbar";
 
 const Home = () => {
-  
-
-  
   return (
+    <div className="video-kard">
+      <video className="background-video" autoPlay loop muted>
+      <source src="/piontView.mp4" type="video/mp4" />
+      </video>
 
-    <div
-   >
-      <header >
-      
-      </header>
-      home about everythiing project school and info
+      <div className="contenu">
+        <h3>let us plan a your movement together...</h3>
+      </div>
+      <SearchBar/>
     </div>
   );
 };
