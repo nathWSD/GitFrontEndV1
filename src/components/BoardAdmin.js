@@ -325,6 +325,7 @@ const BoardAdmin = () => {
                 <p>surname: {userDetails.surname}</p>
                 <p>city: {userDetails.city}</p>
                 <p>street Name and Number: {userDetails.streetNameAndNumber}</p>
+
               </div>
             )}
           </div>
@@ -388,7 +389,8 @@ const BoardAdmin = () => {
               </p>
               <p>Reservation Time End: {reservationData.reservationTimeEnd}</p>
               {reservationData.image && (
-                <img src={reservationData.image} alt="Car Image" />
+                <img 
+                src={reservationData.image} alt="Car Image" />
               )}
 
               <ToastContainer />

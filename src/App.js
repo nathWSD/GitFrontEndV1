@@ -23,6 +23,9 @@ import EventBus from "./common/EventBus";
 import TermsAndPolicy from "./components/TermsAndPolicy";
 import CreateCar from "./components/CreateCar";
 import Kontakt from "./components/Kontakt";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const App = () => {
   //const [showAdminBoard, setShowAdminBoard] = useState(false);
@@ -54,6 +57,7 @@ const App = () => {
   };
 
   return (
+   
     <div className="App-backgroundlayout">
       <nav className="navbar navbar-expand navbar-dark bg-dark">
         <li className="nav-item6">
@@ -70,11 +74,13 @@ const App = () => {
             </Link>
           </li>
 
+          <div className="navbar-nav mr-auto">
           <li className="nav-item2">
             <Link to={"/Fahrzeuge"} className="nav-link">
               Fahrzeuge
             </Link>
           </li>
+          </div>
 
           <li className="nav-item3">
             <Link to={"/tarif"} className="nav-link">
@@ -88,13 +94,13 @@ const App = () => {
             </Link>
           </li>
 
-          <li className="nav-item4">
+          <li className="nav-item5">
             <Link to={"/Kontakt"} className="nav-link">
               Contact
             </Link>
           </li>
 
-          <li className="nav-item5">
+          <li className="nav-item6">
             <Link to={"/termsandpolicy"} className="nav-link">
               Terms and policy
             </Link>
@@ -103,12 +109,12 @@ const App = () => {
 
         {currentUser ? (
           <div className="navbar-nav ml-auto">
-            <li className="nav-item">
+            <li className="nav-item7">
               <Link to={"/profile"} className="nav-link">
                 {currentUser.username}
               </Link>
             </li>
-            <li className="nav-item">
+            <li className="nav-item8">
               <a href="/login" className="nav-link" onClick={logOut}>
                 LogOut
               </a>
@@ -122,7 +128,7 @@ const App = () => {
               </Link>
             </li>
 
-            <li className="nav-item">
+            <li className="nav-item9">
               <Link to={"/register"} className="nav-link">
                 Sign Up
               </Link>
@@ -154,7 +160,9 @@ const App = () => {
           < Route exact path="/createCar" element={<CreateCar />}/>
         </Routes>
       </div>
+      <ToastContainer />
     </div>
+   
   );
 };
 
