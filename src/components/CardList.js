@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
-import "./Card.css";
 import "./CardList.css"
 
 const CardList =()=>{
@@ -38,7 +37,8 @@ const CardList =()=>{
   return (
     <div>
       <div>
-        <select onChange={(e) => handleSearch(e.target.value)}>
+        <select className = "input"
+        onChange={(e) => handleSearch(e.target.value)}>
           <option value="all">All</option>
           <option value="Berlin">Berlin</option>
           <option value="Bremen">Bremen</option>
@@ -48,7 +48,7 @@ const CardList =()=>{
           <option value="Niedersachsen">Niedersachsen</option>
         </select>
       </div>
-      <div className="card-list">
+      <div className = "card-list" >
         <div style={{ height: '100%', overflowY: 'auto' }}>
           {filteredCards.map((card) => (
             <Card

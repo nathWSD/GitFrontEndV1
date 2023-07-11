@@ -11,14 +11,11 @@ export const firstDropdownOptions = [
 
 
   export const getDependentOptions = (selectedValue) => {
-    // Replace with your logic to determine the dependent options
-    // based on the selectedValue from the first dropdown
     if (selectedValue === "Baden-Württemberg") {
       return [
         { label: "Flughafen", value: "Flughafen" },
         { label: "Geislingen", value: "Geislingen" },
         { label: "Heidenheim", value: "Heidenheim" },
-        // ... add more options here
       ];
     } else if (selectedValue === "Berlin") {
       return [
