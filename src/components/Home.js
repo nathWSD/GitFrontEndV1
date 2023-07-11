@@ -1,12 +1,14 @@
 import '../HomePage.css';
 import React from "react";
 import SearchBar from "./Searchbar";
+import VideoBack from "./VideoBack.mp4";
+
 
 const Home = () => {
   return (
     <div className="video-kard">
       <video className="background-video" autoPlay loop muted>
-      <source src="/piontView.mp4" type="video/mp4" />
+      <source src={VideoBack} type="video/mp4" />
       </video>
 
       <div className="contenu">

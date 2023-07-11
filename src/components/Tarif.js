@@ -3,7 +3,7 @@ import "../tarif.css";
 
 const Tarif = () => {
   return (
-    <div class="tarif-container">
+    <div className="tarif-container">
       <h1>
         <b>Unsere Tarife</b>
       </h1>

@@ -30,3 +30,10 @@
  .form-control{
    margin-right  : 10px;
  }
+
+ .imgAbrechnung{
+    margin-bottom:10px;
+    margin-top:10px;
+    max-width: 900px; /* The maximum width the image can have */
+    max-height: 700px; /* The maximum height the image can have */
+  }

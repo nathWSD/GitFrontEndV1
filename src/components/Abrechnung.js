@@ -160,7 +160,8 @@ const Abrechnung = ({ updatePaymentStatus }) => {
         <p>
           <strong>Reservation ID:</strong> {id}
         </p>
-        <img src={image} alt="Car Image" />
+        <img className="imgAbrechnung"
+        src={image} alt="Car Image" />
         <p>
           {" "}
           <strong>Car ID:</strong> {carId}

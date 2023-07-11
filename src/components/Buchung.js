@@ -7,10 +7,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
-import { reservation, workerMakesReservation } from "../services/AdminAccessService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import {
+  reservation,
+  workerMakesReservation,
+} from "../services/AdminAccessService";
 
 const Buchung = () => {
   const [reservationDateStart, setreservationDateStart] = useState("");
@@ -23,10 +26,10 @@ const Buchung = () => {
   const [image, setImage] = useState("");
 
   /* ---username to be given by worker for reservation of user--- */
-  const [username , setUsername]=useState("");
+  const [username, setUsername] = useState("");
 
   const currentDateTime = moment();
-  const currentUser =AuthService.getCurrentUser();
+  const currentUser = AuthService.getCurrentUser();
   const queryParams = new URLSearchParams(window.location.search);
   // Access the chosen card's information from URL parameters
   const category = queryParams.get("category");
@@ -35,7 +38,7 @@ const Buchung = () => {
   const carId = id;
 
   useEffect(() => {
-   // const queryParams = new URLSearchParams(window.location.search);
+    // const queryParams = new URLSearchParams(window.location.search);
     const cityQueryParam = queryParams.get("city");
     const actualStationQueryParam = queryParams.get("actualStation");
     const imageQueryParam = queryParams.get("image");
@@ -47,11 +50,11 @@ const Buchung = () => {
   const navigate = useNavigate();
   const reservationContext = useContext(ReservationContext);
   const isLoggedIn = reservationContext ? reservationContext.isLoggedIn : false;
-  
+
   const stationStart = city + "-" + actualStation;
   const stationEnd = city + "-" + actualStation;
 
-/*   
+  /*   
   const isButtonDisabled =
   !city ||
   !reservationDateStart ||
@@ -60,18 +63,17 @@ const Buchung = () => {
   (!firstSelectionMade && (reservationDateEnd || reservationTimeEnd));
   */
   const isButtonDisabled =
-  !city ||
-  !reservationDateStart ||
-  !reservationTimeStart ||
-  ((currentUser && currentUser.roles.includes("ROLE_WORKER")) && !username) ||
-  (firstSelectionMade && (!reservationDateEnd || !reservationTimeEnd)) ||
-  (!firstSelectionMade && (reservationDateEnd || reservationTimeEnd));
-  
+    !city ||
+    !reservationDateStart ||
+    !reservationTimeStart ||
+    (currentUser && currentUser.roles.includes("ROLE_WORKER") && !username) ||
+    (firstSelectionMade && (!reservationDateEnd || !reservationTimeEnd)) ||
+    (!firstSelectionMade && (reservationDateEnd || reservationTimeEnd));
+
   const handleReservationButtonClick = async () => {
     const currentUser = AuthService.getCurrentUser();
-  
+
     if (isLoggedIn || currentUser) {
-  
       const selectedCardDetails = {
         reservationDateStart: reservationDateStart,
         reservationDateEnd: reservationDateEnd,
@@ -80,12 +82,14 @@ const Buchung = () => {
         carId: carId,
         stationStart: stationStart,
         stationEnd: stationEnd,
-/*         tarif: tarif,
- */        image: image,
+        /*         tarif: tarif,
+         */ image: image,
         /* ----conditional add of username incase worker makes reservation--- */
-        ...(currentUser.roles.includes("ROLE_WORKER") && { username: username }),
+        ...(currentUser.roles.includes("ROLE_WORKER") && {
+          username: username,
+        }),
       };
-  
+
       const selectedDetailsForUser = {
         id: id,
         name: name,
@@ -97,20 +101,20 @@ const Buchung = () => {
         reservationTimeEnd: reservationTimeEnd,
         location: city,
         actualStation: actualStation,
-    /*     tarif: tarif, */
+        /*     tarif: tarif, */
         carId: carId,
       };
-  
+
       const token = currentUser.token;
-  
+
       if (currentUser.roles.includes("ROLE_USER")) {
         await reservation(selectedCardDetails, token)
           .then((response) => {
-            toast('Reservation success.', { autoClose: 3000 });
+            toast("Reservation success.", { autoClose: 3000 });
 
-          setTimeout(() => {
-            navigate("/BoardUser", { state: selectedDetailsForUser });
-          }, 4000);
+            setTimeout(() => {
+              navigate("/BoardUser", { state: selectedDetailsForUser });
+            }, 4000);
           })
           .catch((error) => {
             console.error("Reservation error:", error);
@@ -118,7 +122,7 @@ const Buchung = () => {
       } else if (currentUser.roles.includes("ROLE_WORKER")) {
         await workerMakesReservation(selectedCardDetails, token)
           .then((response) => {
-            toast('Reservation success (Worker).', { autoClose: 2000 });
+            toast("Reservation success (Worker).", { autoClose: 2000 });
             setTimeout(() => {
               navigate("/BoardModerator");
             }, 4000);
@@ -127,13 +131,15 @@ const Buchung = () => {
             console.error("Worker reservation error:", error);
           });
       } else {
-        toast('You must log in as a user or worker before reserving.', { autoClose: 3000 });
+        toast("You must log in as a user or worker before reserving.", {
+          autoClose: 3000,
+        });
       }
     } else {
-      toast('You must log in before reserving.', { autoClose: 3000 });
+      toast("You must log in before reserving.", { autoClose: 3000 });
     }
   };
-  
+
   const availableDays = [];
   const availableHours = [];
 
@@ -157,10 +163,10 @@ const Buchung = () => {
       <div className="Buchung">
         <div className="row">
           <div>
-            <label htmlFor="city">City:</label>
-            <input type="text" id="city" value={city} disabled />
-            <label htmlFor="actualstation">Actual Station:</label>
-            <input
+            <label htmlFor="city"> <strong>City:</strong></label>
+            <input className="Choice" type="text" id="city" value={city} disabled />
+            <label htmlFor="actualstation"> <strong>Actual Station:</strong></label>
+            <input className="Choice"
               type="text"
               id="actualstation"
               value={actualStation}
@@ -170,6 +176,7 @@ const Buchung = () => {
         </div>
         <div className="row">
           <select
+            className="Selection"
             value={reservationDateStart}
             onChange={(e) => {
               setreservationDateStart(e.target.value);
@@ -185,6 +192,7 @@ const Buchung = () => {
           </select>
 
           <select
+            className="Selection"
             value={reservationTimeStart}
             onChange={(e) => setreservationTimeStart(e.target.value)}
           >
@@ -199,12 +207,14 @@ const Buchung = () => {
         <div className="row">
           <div>
             <h2>Selected Card Details:</h2>
-            <img src={image} alt={name} />
+            <img className="ImgBuchung"
+            src={image} alt={name} />
             <h3>Name: {name}</h3>
             <h3>Category: {category}</h3>
             <h3>id: {id}</h3>
 
             <button
+              className="reservationMake"
               onClick={handleReservationButtonClick}
               disabled={isButtonDisabled}
             >
@@ -216,6 +226,7 @@ const Buchung = () => {
           {firstSelectionMade && (
             <div>
               <select
+                className="Selection"
                 value={reservationDateEnd}
                 onChange={(e) => {
                   const selectedDateEnd = e.target.value;
@@ -236,6 +247,7 @@ const Buchung = () => {
               </select>
 
               <select
+                className="Selection"
                 value={reservationTimeEnd}
                 onChange={(e) => setreservationTimeEnd(e.target.value)}
               >
@@ -263,18 +275,19 @@ const Buchung = () => {
         </div>
         <div className="row"></div>
 
-        <div className="row">  
-         {currentUser && currentUser.roles.includes("ROLE_WORKER") && (
-      <div className="row">
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-    )}</div>
+        <div className="row">
+          {currentUser && currentUser.roles.includes("ROLE_WORKER") && (
+            <div className="row">
+              <label htmlFor="username">Username:</label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+          )}
+        </div>
       </div>
       <ToastContainer />
     </div>

@@ -3,7 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
-import "./Register.css";
+import "./ForgottenPassword.css";
 import AuthService from "../services/auth.service";
 import { useNavigate } from "react-router-dom";
 
@@ -32,19 +32,27 @@ const vpassword = (value) => {
   }
 };
 
-const vcheckpassword = (value) => {
-  const passwordValidation = vpassword(value); // Invoke vpassword function to get the validation result
-  if (passwordValidation) {
+const vcheckpassword = (value, password) => {
+  if (value.trim() !== password.trim()) {
     return (
-      <div className="invalid-feedback d-block">The password must be same.</div>
+      <div className="invalid-feedback d-block">The password must be the same.</div>
     );
   }
 };
 
+
+const validId = (value) => {
+  if (!(value)) {
+    return (
+      <div className="invalid-feedback d-block">You must provide your Id.</div>
+    );
+  }
+};
 const ForgottenPassword = (props) => {
   const form = useRef();
   const checkBtn = useRef();
 
+  const [id , setId] = useState("");
   const [email, setEmail] = useState("");
   const [phonenumber, setphonenumber] = useState("");
   const [username, setUsername] = useState("");
@@ -70,6 +78,12 @@ const ForgottenPassword = (props) => {
     }
   };
 
+  
+  const onChangeId = (e) => {
+    const id = e.target.value;
+    setId(id);
+  };
+
   const onChangeEmail = (e) => {
     const email = e.target.value;
     setEmail(email);
@@ -81,8 +95,8 @@ const ForgottenPassword = (props) => {
   };
 
   const onChangecheckPassword = (e) => {
-    const checkpassword = e.target.value;
-    setcheckPassword(checkpassword);
+    const value = e.target.value;
+    setcheckPassword(value);
   };
 
   
@@ -98,11 +112,12 @@ const ForgottenPassword = (props) => {
 
   if (formIsValid)  {
       AuthService.ResetPersonalData(
+        id,
         username,
         email,
         password,
         phonenumber,
-        checkpassword
+        checkpassword,
       ).then(
         (response) => {
           setTimeout(() => {
@@ -132,10 +147,24 @@ const ForgottenPassword = (props) => {
   };
 
   return (
-    <div>
+    <div className="ForgottenPassword_container">
       <Form onSubmit={handleForgottenPassword} ref={form}>
         {!successful && (
           <div>
+
+            <div className="form-group">
+              <label htmlFor="id">Your Id</label>
+              <Input
+                type="number"
+                className="form-control"
+                placeholder="Enter your ID"
+                name="id"
+                value={id}
+                onChange={onChangeId}
+                validations={[required, validId]}
+              />
+            </div>
+
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <Input
@@ -197,7 +226,7 @@ const ForgottenPassword = (props) => {
                 placeholder="repeat your password"
                 value={checkpassword}
                 onChange={onChangecheckPassword}
-                validations={[required, vcheckpassword]}
+                validations={[required, () => vcheckpassword(checkpassword, password)]}
               />
             </div>
           </div>
@@ -216,7 +245,7 @@ const ForgottenPassword = (props) => {
           </div>
         )}
         <div className="form-group">
-          <button className="btn btn-primary btn-block">Submit</button>
+          <button className="ButtonPasswordVergessen">Submit</button>
         </div>
       </Form>
     </div>

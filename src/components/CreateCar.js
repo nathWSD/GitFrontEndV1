@@ -69,7 +69,8 @@ const CreateCar = () => {
   return (
     <div>
       <h2>Create Car</h2>
-      <form onSubmit={handleSubmit}>
+      <form       className="CreateCarForm"
+       onSubmit={handleSubmit}>
      {/*    <div>
           <label htmlFor="id">ID:</label>
           <input
@@ -82,7 +83,7 @@ const CreateCar = () => {
         </div> */}
         <div>
           <label htmlFor="name">Name:</label>
-          <input
+          <input      className="form-control"
             type="text"
             id="name"
             name="name"
@@ -92,7 +93,7 @@ const CreateCar = () => {
         </div>
         <div>
           <label htmlFor="category">category:</label>
-          <input
+          <input      className="form-control"
             type="text"
             id="category"
             name="category"
@@ -103,7 +104,7 @@ const CreateCar = () => {
         
         <div>
           <label htmlFor="description">description:</label>
-          <input
+          <input      className="form-control"
             type="text"
             id="description"
             name="description"
@@ -114,7 +115,7 @@ const CreateCar = () => {
 
         <div>
           <label htmlFor="image">Image Link:</label>
-          <input
+          <input  className="form-control"
             type="text"
             id="image"
             name="image"
@@ -125,7 +126,7 @@ const CreateCar = () => {
 
         <div>
           <label htmlFor="city">City:</label>
-          <select
+          <select      className="form-control"
             id="city"
             name="city"
             value={formData.city}
@@ -141,7 +142,7 @@ const CreateCar = () => {
         </div>
         <div>
           <label htmlFor="actualstation">Actual Station:</label>
-          <select
+          <select      className="form-control"
             id="actualstation"
             name="actualstation"
             value={formData.actualstation}
@@ -156,7 +157,8 @@ const CreateCar = () => {
           </select>
         </div>
 
-        <button type="submit">Create car</button>
+        <button className = "createCar"
+         type="submit">Create car</button>
       </form>
       {message && <p>{message}</p>}
       {/* Popup message */}

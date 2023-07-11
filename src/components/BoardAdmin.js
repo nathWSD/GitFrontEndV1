@@ -27,7 +27,7 @@ const BoardAdmin = () => {
   const [users, setUsers] = useState([]);
 
   const [username, setUsername] = useState("");
-  const [userDetails, setUserDetails] = useState(null);
+  const [userDetails, setUserDetails] = useState({});
   const [reservations, setReservations] = useState([]);
   const [usernameRoleChange, setusernameRoleChange] = useState("");
   const [message, setMessage] = useState("");
@@ -44,6 +44,8 @@ const BoardAdmin = () => {
   const [showTable, setShowTable] = useState(false); // State variable to track table visibility
   const [reservationDeleteId, setReservationDeleteId] = useState("");
   const [carIdToDelete, setcarIdToDelete] = useState("");
+  const [isTableVisible, setTableVisible] = useState(false);
+  const [isUserTable, setIsUserTable] = useState(false);
 
   const handleSearchCars = async () => {
     try {
@@ -51,11 +53,12 @@ const BoardAdmin = () => {
 
       // Call the findCarById function to fetch the car by ID
       const result = await findCarById(searchId, token);
-
       // Process the result here
+      setTableVisible(true); // Set the visibility of the table to true
+
       setSearchResult(result);
     } catch (error) {
-      // Handle error
+      setError("Id does not corespond to any car");
       console.error("Error searching cars:", error);
     }
   };
@@ -68,12 +71,17 @@ const BoardAdmin = () => {
     setDependentOption(""); // Reset the selected value of the dependent dropdown
   };
 
+
+
   const handleSearchUser = async () => {
     try {
       const token = currentUser.token;
       const userData = await searchUserByUsername(username, token);
       // Handle the retrieved user data
+      setUserDetails(userData);
+      setIsUserTable(true);
     } catch (error) {
+      toast.error("invalid user ");
       console.error("Error searching user:", error);
       // Handle the error
     }
@@ -207,7 +215,7 @@ const BoardAdmin = () => {
       toast("Reservation deleted successfully.", { autoClose: 2000 });
     } catch (error) {
       console.error("Error deleting reservation:", error);
-      toast("Error deleting reservation.", { autoClose: 2000 });
+      toast("Reservation to delete not found.", { autoClose: 2000 });
     }
   };
   return (
@@ -263,7 +271,8 @@ const BoardAdmin = () => {
           </p>
 
           <div>
-            <button onClick={fetchAllUsers}>Fetch All Users</button>
+            <button className = "FetchAllUsers"
+             onClick={fetchAllUsers}>Fetch All Users</button>
 
             <div>
               <table className="UserTable">
@@ -277,6 +286,7 @@ const BoardAdmin = () => {
                     <th>Country</th>
                     <th>City</th>
                     <th>Street Name and Number</th>
+                    <th>roles</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -290,6 +300,11 @@ const BoardAdmin = () => {
                       <td>{user.country}</td>
                       <td>{user.city}</td>
                       <td>{user.streetNameAndNumber}</td>
+                      <td>
+                        {user.roles.map((role) => (
+                          <span key={role.id}>{role.name}</span>
+                        ))}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -312,20 +327,59 @@ const BoardAdmin = () => {
             <input
               type="text"
               value={username}
+              className="input"
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter username"
             />
-            <button onClick={handleSearchUser}>Search</button>
+            <button className = "SearchUserButton"
+            onClick={handleSearchUser}>Search</button>
 
-            {userDetails && (
-              <div>
-                <h3>User Details</h3>
-                <p>Username: {userDetails.username}</p>
-                <p>Email: {userDetails.email}</p>
-                <p>surname: {userDetails.surname}</p>
-                <p>city: {userDetails.city}</p>
-                <p>street Name and Number: {userDetails.streetNameAndNumber}</p>
-
+            {isUserTable && userDetails && (
+              <div className="table-container">
+                <table className="UserTable">
+                  <tbody>
+                    <tr>
+                      <th>Attribute</th>
+                      <th>Value</th>
+                    </tr>
+                    <tr>
+                      <td>id</td>
+                      <td>{userDetails.User.id}</td>
+                    </tr>
+                    <tr>
+                      <td>Username</td>
+                      <td>{userDetails.User.username}</td>
+                    </tr>
+                    <tr>
+                      <td>Email</td>
+                      <td>{userDetails.User.email}</td>
+                    </tr>
+                    <tr>
+                      <td>Firstname</td>
+                      <td>{userDetails.User.firstname}</td>
+                    </tr>
+                    <tr>
+                      <td>Surname</td>
+                      <td>{userDetails.User.surname}</td>
+                    </tr>
+                    <tr>
+                      <td>Country</td>
+                      <td>{userDetails.User.country}</td>
+                    </tr>
+                    <tr>
+                      <td>City</td>
+                      <td>{userDetails.User.city}</td>
+                    </tr>
+                    <tr>
+                      <td>Street Name and Number</td>
+                      <td>{userDetails.User.streetNameAndNumber}</td>
+                    </tr>
+                    <tr>
+                      <td>Tarif</td>
+                      <td>{userDetails.User.tarif}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             )}
           </div>
@@ -341,6 +395,7 @@ const BoardAdmin = () => {
           <input
             type="number"
             min="1"
+            className="input"
             placeholder="reservation Id for deleting"
             value={reservationDeleteId}
             onChange={(e) => setReservationDeleteId(e.target.value)}
@@ -348,11 +403,12 @@ const BoardAdmin = () => {
           <input
             type="number"
             min="1"
+            className ="inputCarId"
             placeholder="Car Id for deleting"
             value={carIdToDelete}
             onChange={(e) => setcarIdToDelete(e.target.value)}
           />
-          <button
+          <button className="DeleteReservation"
             onClick={handleDeleteReservation}
             disabled={!reservationDeleteId || !carIdToDelete}
           >
@@ -364,11 +420,12 @@ const BoardAdmin = () => {
           <input
             type="number"
             min="1"
+            className = "input"
             value={reservationId}
             onChange={(e) => setReservationId(e.target.value)}
             placeholder="Enter Reservation ID"
           />
-          <button
+          <button className = "showReservationData"
             onClick={handleFindReservation}
             disabled={!reservationId} // Disable button when reservationId is empty
           >
@@ -389,8 +446,11 @@ const BoardAdmin = () => {
               </p>
               <p>Reservation Time End: {reservationData.reservationTimeEnd}</p>
               {reservationData.image && (
-                <img 
-                src={reservationData.image} alt="Car Image" />
+                <img
+                  className="ImgOneReservation"
+                  src={reservationData.image}
+                  alt="Car Image"
+                />
               )}
 
               <ToastContainer />
@@ -398,7 +458,8 @@ const BoardAdmin = () => {
             </div>
           )}
 
-          <button onClick={handleToggleReservations}>
+          <button className = "showAllReservations"
+          onClick={handleToggleReservations}>
             {showReservations
               ? "Hide all Reservations"
               : "Show all Reservations"}
@@ -414,7 +475,11 @@ const BoardAdmin = () => {
               <ul>
                 {findreservations.map((reservation) => (
                   <li key={reservation.id}>
-                    <img src={reservation.image} alt="Car Image" />
+                    <img
+                      className="ImgAllReservation"
+                      src={reservation.image}
+                      alt="Car Image"
+                    />
                     <p>Username: {reservation.username}</p>
                     <p>reservation Id: {reservation.id}</p>
                     <p>Start Date: {reservation.reservationDateStart}</p>
@@ -438,48 +503,25 @@ const BoardAdmin = () => {
             <strong> Car Administration </strong>
           </p>
         </div>
-        {/*   <div className="row">
-          <div>
-            <select value={selectedOption} onChange={handleFirstDropdownSelect}>
-              <option value="">Select a City</option>
-              {firstDropdownOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-
-            {selectedOption && (
-              <select
-                value={dependentOption}
-                onChange={(e) => setDependentOption(e.target.value)}
-              >
-                <option value="">Select a location</option>
-                {dependentOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-        </div> */}
 
         <div>
           <input
             type="number"
             min="1"
+            className = "input"
             value={searchId}
             onChange={(e) => setSearchId(e.target.value)}
             placeholder="Enter card ID"
           />
-          <button onClick={handleSearchCars}>Search</button>
+          <button className = "searchCar"
+          onClick={handleSearchCars}>Search</button>
 
-          {searchResult && (
+          {searchResult && searchResult.vehicule ? (
             <div>
               <h3>Search Result</h3>
               <p>Name: {searchResult.vehicule.name}</p>
               <img
+                className="CarSearching"
                 src={searchResult.vehicule.image}
                 alt={searchResult.vehicule.name}
               />
@@ -488,12 +530,21 @@ const BoardAdmin = () => {
               <p>City: {searchResult.vehicule.city}</p>
               <p>Actual Station: {searchResult.vehicule.actualStation}</p>
             </div>
+          ) : (
+            <div>
+              {searchResult ? (
+                <p>No search results found.</p>
+              ) : (
+                <p>Perform a search to see the results.</p>
+              )}
+            </div>
           )}
         </div>
 
         <div className="row">
-          <button onClick={addAllVehiclesToDatabase}>Add All Vehicles</button>
-          Row 4 - Item 1
+          <button className="addAllVehicules"
+          onClick={addAllVehiclesToDatabase}>Add All Vehicles</button>
+         
         </div>
         <div className="row">
           <Link
@@ -507,10 +558,13 @@ const BoardAdmin = () => {
         <div className="row">
           <input
             type="text"
+            className="UserRole"
+            placeholder="Enter username to be updated"
             value={usernameRoleChange}
             onChange={(e) => setusernameRoleChange(e.target.value)}
           />
-          <button onClick={handleUpdateRole} disabled={!usernameRoleChange}>
+          <button className="addAllVehicules"
+          onClick={handleUpdateRole} disabled={!usernameRoleChange}>
             Search and Update user Role
           </button>
           <div>{message}</div>
