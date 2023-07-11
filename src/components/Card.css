@@ -1,4 +1,4 @@
-/* .card {
+ .card {
   background-color: #fff;
   padding: 10px 20px;
   border-radius: 5px;
@@ -8,7 +8,7 @@
   width: 500px;
   height: 500px;
 }
- */
+ 
 
  .cardItem {
   display: flex;

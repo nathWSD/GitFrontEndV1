@@ -48,8 +48,9 @@ const CardList =()=>{
           <option value="Niedersachsen">Niedersachsen</option>
         </select>
       </div>
-      <div className = "card-list" >
-        <div style={{ height: '100%', overflowY: 'auto' }}>
+      <div  >
+        <div className = "card-list"
+        style={{ height: '100%', overflowY: 'auto' }}>
           {filteredCards.map((card) => (
             <Card
               key={card.id}
