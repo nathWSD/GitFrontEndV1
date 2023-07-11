@@ -5,7 +5,6 @@ const axiosInstance = axios.create();
 axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
 
-// Add a request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
    
