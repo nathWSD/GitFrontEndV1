@@ -73,8 +73,8 @@ const Login = () => {
   };
 
   return (
-    <div className="container_wrapper">
-      <div className= "container">
+    <div >
+      <div>
       <div className="loginContainer">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
@@ -105,11 +105,13 @@ const Login = () => {
                 value={password}
                 onChange={onChangePassword}
               />
+
               <button
                 type="button"
                 className="password-toggle-btn"
                 onClick={handlePasswordToggle}
               >
+                 
                 {passwordVisible ? (
                   <i className="fas fa-eye-slash"></i>
                 ) : (
@@ -121,7 +123,7 @@ const Login = () => {
           </div>
 
           <div className="form-group">
-            <button className="btn btn-primary btn-block" disabled={loading}>
+            <button className="buttonLogin" disabled={loading}>
               {loading && (
                 <span className="spinner-border spinner-border-sm"></span>
               )}

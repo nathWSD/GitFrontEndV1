@@ -1,11 +1,8 @@
 import AuthService from "../services/auth.service";
 import { Link } from "react-router-dom";
 import "./BoardUser.css";
-import { useNavigate } from "react-router-dom";
-import Fahrzeuge from "./Fahrzeuge";
-import Buchung from "./Buchung";
-import { useLocation } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+
+import React, {  useState } from "react";
 import {
   findByUserReservation,
   deleteReservation,
@@ -42,12 +39,9 @@ const handlePayment = (reservationId) => {
       findByUserReservation("activ", token)
         .then((response) => {
           console.log("this is response", response);
-          const receivedReservations = response.reservations || [];
-          const reservationsWithPaidStatus = receivedReservations.map((reservation) => ({
-            ...reservation,
-            paid: false, // Set the initial paid status to false
-          }));
-          setReservations(reservationsWithPaidStatus);
+          const reservations = response.reservations || [];
+         
+          setReservations(reservations);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -92,6 +86,8 @@ const handlePayment = (reservationId) => {
   return (
     <div className="BoardUser">
       <div className="rows">
+      {currentUser ? (
+          <>
         <h2>{currentUser.username} Profile</h2>
         <header>
           <h3>
@@ -129,7 +125,7 @@ const handlePayment = (reservationId) => {
           {currentUser.roles &&
             currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
         </ul>
-
+              
         <div>
           <Link
             style={{ textDecoration: "none", color: "blue" }}
@@ -138,16 +134,21 @@ const handlePayment = (reservationId) => {
             change personal data
           </Link>
         </div>
+        </>
+        ) : (
+          <h2>Loading...</h2>
+        )}
+
       </div>
 
       <div className="rows">
-        <h2>booked Cars</h2>
-    
-          <p>Reservations:</p>
+       
+          
           <div>
             {/* Button to fetch reservations */}
-            <button onClick={handleFetchReservations}>
-              Fetch Reservations
+            <button className = "buttonChooseACar"
+             onClick={handleFetchReservations}>
+              Fetch Reservations 
             </button>
 
             {/* Display reservations */}
@@ -167,41 +168,45 @@ const handlePayment = (reservationId) => {
                     ) : (
                       reservations.map((reservation) => (
                         <div key={reservation.id}>
-                          <img src={reservation.image} alt="Car Image" />
-                          <p>Car Id: {reservation.carId}</p>
+                          <img className ="carsUser"
+                          src={reservation.image} alt="Car Image" />
+                          <p>   <strong>Car Id: </strong>{reservation.carId}</p>
                           <p>
-                            Price: {reservation.price} {"\u20AC"}
+                          <strong> Price:</strong> {reservation.price} {"\u20AC"}
                           </p>
                           <p>
-                            Reservation Date start:{" "}
+                          <strong>  Reservation Date start:  </strong> {" "}
                             {reservation.reservationDateStart}
                           </p>
                           <p>
-                            Reservation Date End:{" "}
+                          <strong>  Reservation Date End:  </strong> {" "}
                             {reservation.reservationDateEnd}
                           </p>
                           <p>
-                            Reservation Time start:{" "}
+                          <strong>  Reservation Time start:  </strong> {" "}
                             {reservation.reservationTimeStart}
                           </p>
                           <p>
-                            Reservation Time End:{" "}
+                          <strong>  Reservation Time End:  </strong> {" "}
                             {reservation.reservationTimeEnd}
                           </p>
                           <p>
-                            Start and End Station: {reservation.stationStart}
+                          <strong>  Start and End Station:   </strong> {reservation.stationStart}
                           </p>
+                          
                           <p style={{ color: reservation.paid ? "green" : "red" }}>
-                          Payment Status: {reservation.paid ? "Paid" : "Not Paid"}
+                          <strong> Payment Status:  </strong>  {reservation.paid ? "Paid" : "Not Paid"}
                            </p>
-                          <button onClick={() => handleDeleteReservation(parseInt(reservation.id), parseInt(reservation.carId))}>
+                          <button className="buttonDelete"
+                          onClick={() => handleDeleteReservation(parseInt(reservation.id), parseInt(reservation.carId))}>
                               Delete
                             </button>
                           <Link
                             to={`/abrechnung?reservationId=${reservation.id}&carId=${reservation.carId}&price=${reservation.price}&image=${reservation.image}`}
                           >
  {!reservation.paid && (
-              <button onClick={() => handlePayment(reservation.id)}>
+              <button className = "buttonMakePayment"
+              onClick={() => handlePayment(reservation.id)}>
                 Make Payment
               </button>
             )}                          </Link>
@@ -219,7 +224,8 @@ const handlePayment = (reservationId) => {
         <h1>User Dashboard</h1>
         <p>
           <Link to="/fahrzeuge">
-            <button>choose a car</button>
+            <button className ="buttonChooseACar"
+            >choose a car</button>
           </Link>
         </p>
       </div>

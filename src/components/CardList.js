@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
 import "./Card.css";
-
+import "./CardList.css"
 
 const CardList =()=>{
   const [cards, setCards] = useState([]);

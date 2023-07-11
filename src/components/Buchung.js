@@ -106,8 +106,11 @@ const Buchung = () => {
       if (currentUser.roles.includes("ROLE_USER")) {
         await reservation(selectedCardDetails, token)
           .then((response) => {
-            toast('Reservation success.', { autoClose: 2000 });
+            toast('Reservation success.', { autoClose: 3000 });
+
+          setTimeout(() => {
             navigate("/BoardUser", { state: selectedDetailsForUser });
+          }, 4000);
           })
           .catch((error) => {
             console.error("Reservation error:", error);
@@ -116,7 +119,9 @@ const Buchung = () => {
         await workerMakesReservation(selectedCardDetails, token)
           .then((response) => {
             toast('Reservation success (Worker).', { autoClose: 2000 });
-            navigate("/BoardModerator");
+            setTimeout(() => {
+              navigate("/BoardModerator");
+            }, 4000);
           })
           .catch((error) => {
             console.error("Worker reservation error:", error);

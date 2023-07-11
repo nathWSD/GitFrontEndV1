@@ -94,8 +94,9 @@ const ForgottenPassword = (props) => {
     setSuccessful(false);
 
     form.current.validateAll();
+    const formIsValid = form.current.getChildContext()._errors.length === 0;
 
-    if (checkBtn.current.context._errors.length === 0) {
+  if (formIsValid)  {
       AuthService.ResetPersonalData(
         username,
         email,

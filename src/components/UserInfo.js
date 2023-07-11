@@ -79,19 +79,28 @@ const UserInfo = () => {
           currentUser.roles &&
           currentUser.roles.includes("ROLE_ADMIN")
         ) {
-          navigate("/BoardAdmin");
+          setTimeout(() => {
+            navigate("/BoardAdmin");
+          }, 4000); // Delay the navigation by 4000 milliseconds (autoClose time of the toast)
+  
         } else if (
           currentUser &&
           currentUser.roles &&
           currentUser.roles.includes("ROLE_WORKER")
         ) {
-          navigate("/BoardModerator");
+          setTimeout(() => {
+            navigate("/BoardModerator");
+          }, 4000); // Delay the navigation by 4000 milliseconds (autoClose time of the toast)
+  
         } else if (
           currentUser &&
           currentUser.roles &&
           currentUser.roles.includes("ROLE_USER")
         ) {
-          navigate("/BoardUser");
+          setTimeout(() => {
+            navigate("/BoardUser");
+          }, 4000); // Delay the navigation by 4000 milliseconds (autoClose time of the toast)
+  
         } else {
         }
       })
@@ -110,12 +119,12 @@ const UserInfo = () => {
   };
 
   return (
-    <div className="UserInfo">
+    <div className="userInfo">
       <div>
         <label className="UserInfo label">your ID: </label>
         {editing ? (
           <input
-            className="UserInfo input"
+          className="form-control"
             type="number"
             name="id"
             value={editedData.id || ""}
@@ -130,7 +139,7 @@ const UserInfo = () => {
         <label className="UserInfo label">First name: </label>
         {editing ? (
           <input
-            className="UserInfo input"
+          className="form-control"
             type="text"
             name="firstname"
             value={editedData.firstname || ""}
@@ -145,7 +154,7 @@ const UserInfo = () => {
         <label className="UserInfo label">Surname: </label>
         {editing ? (
           <input
-            className="UserInfo input"
+          className="form-control"
             type="text"
             name="surname"
             value={editedData.surname || ""}
@@ -160,7 +169,7 @@ const UserInfo = () => {
         <label className="UserInfo label">User name: </label>
         {editing ? (
           <input
-            className="UserInfo input"
+          className="form-control"
             type="text"
             name="username"
             value={editedData.username || ""}
@@ -175,7 +184,7 @@ const UserInfo = () => {
         <label className="UserInfo label">Password: </label>
         {editing ? (
           <input
-            className="UserInfo input"
+          className="form-control"
             type="password"
             name="password"
             value={editedData.password || ""}
@@ -190,7 +199,7 @@ const UserInfo = () => {
         <label className="UserInfo label">Password verify: </label>
         {editing ? (
           <input
-            className="UserInfo input"
+          className="form-control"
             type="password"
             name="checkpassword"
             value={editedData.checkpassword || ""}
@@ -210,7 +219,7 @@ const UserInfo = () => {
         <label className="UserInfo label">City: </label>
         {editing ? (
           <input
-            className="UserInfo input"
+             className="form-control"
             type="text"
             name="city"
             value={editedData.city || ""}
@@ -225,7 +234,7 @@ const UserInfo = () => {
         <label className="UserInfo label">Country: </label>
         {editing ? (
           <input
-            className="UserInfo input"
+          className="form-control"
             type="text"
             name="country"
             value={editedData.country || ""}
@@ -240,7 +249,7 @@ const UserInfo = () => {
         <label className="UserInfo label">street Name And Number </label>
         {editing ? (
           <input
-            className="UserInfo input"
+          className="form-control"
             type="text"
             name="streetNameAndNumber"
             value={editedData.streetNameAndNumber || ""}
@@ -255,7 +264,7 @@ const UserInfo = () => {
         <label className="UserInfo label">postal Code: </label>
         {editing ? (
           <input
-            className="UserInfo input"
+          className="form-control"
             type="text"
             name="postalCode"
             value={editedData.postalCode || ""}
@@ -266,11 +275,11 @@ const UserInfo = () => {
         )}
       </div>
 
-      <div>
+      <div className="form-group">
         <label className="UserInfo label">Email: </label>
         {editing ? (
           <input
-            className="UserInfo input"
+          className="form-control"
             type="email"
             name="email"
             value={editedData.email || ""}
@@ -281,11 +290,11 @@ const UserInfo = () => {
         )}
       </div>
 
-      <div>
+      <div className="form-group">
         <label className="UserInfo label">phonenumber: </label>
         {editing ? (
           <input
-            className="UserInfo input"
+          className="form-control"
             type="text"
             name="phonenumber"
             value={editedData.phonenumber || ""}
@@ -301,7 +310,7 @@ const UserInfo = () => {
           <label className="UserInfo label">Tarif:</label>
           {editing ? (
             <select
-              className="UserInfo input"
+            className="form-control"
               name="tarif"
               value={editedData.tarif || "basic"}
               onChange={handleChange}
@@ -318,11 +327,11 @@ const UserInfo = () => {
         </div>
       )}
       {editing ? (
-        <button className="UserInfo button" onClick={handleSave}>
+        <button className="UserInfo_button" onClick={handleSave}>
           Save
         </button>
       ) : (
-        <button className="UserInfo button" onClick={handleEdit}>
+        <button className="UserInfo_button" onClick={handleEdit}>
           Edit
         </button>
       )}

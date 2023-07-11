@@ -269,7 +269,7 @@ const Register = React.memo((props) => {
   };
 
   return (
-    <div className="register-wrapper">
+    <div >
       <div className="register-container">
         <img
           src="https://www.seekpng.com/png/full/966-9665493_my-profile-icon-blank-profile-image-circle.png"
@@ -280,8 +280,8 @@ const Register = React.memo((props) => {
         <Form onSubmit={handleRegister} ref={form}>
           {!successful && (
             <div>
-              <div className="row">
-                <div className="col">
+              <div >
+                <div >
                   <div className="form-group">
                     <label htmlFor="firstname">Firstname</label>
                     <Input
@@ -294,8 +294,8 @@ const Register = React.memo((props) => {
                     />
                   </div>
                 </div>
-                <div className="col">
-                  <div className="form-group">
+                <div >
+                  <div>
                     <label htmlFor="surname">Surname</label>
                     <Input
                       type="text"
@@ -309,9 +309,9 @@ const Register = React.memo((props) => {
                 </div>
               </div>
 
-              <div className="row">
-                <div className="col">
-                  <div className="form-group">
+              <div>
+                <div >
+                  <div >
                     <label htmlFor="birthday">Birthday</label>
                     <Input
                       type="date"
@@ -324,8 +324,8 @@ const Register = React.memo((props) => {
                     />
                   </div>
                 </div>
-                <div className="col">
-                  <div className="form-group">
+                <div >
+                  <div >
                     <label htmlFor="country">Country</label>
                     <Input
                       type="text"
@@ -339,9 +339,9 @@ const Register = React.memo((props) => {
                 </div>
               </div>
 
-              <div className="row">
-                <div className="col">
-                  <div className="form-group">
+              <div>
+                <div>
+                  <div>
                     <label htmlFor="city">City</label>
                     <Input
                       type="text"
@@ -353,8 +353,8 @@ const Register = React.memo((props) => {
                     />
                   </div>
                 </div>
-                <div className="col">
-                  <div className="form-group">
+                <div >
+                  <div >
                     <label htmlFor="streetNameAndNumber">
                       Street name and number
                     </label>
@@ -370,9 +370,9 @@ const Register = React.memo((props) => {
                 </div>
               </div>
 
-              <div className="row">
-                <div className="col">
-                  <div className="form-group">
+              <div>
+                <div>
+                  <div>
                     <label htmlFor="city">Postal Code</label>
                     <Input
                       type="text"
@@ -385,8 +385,8 @@ const Register = React.memo((props) => {
                   </div>
                 </div>
 
-                <div className="col">
-                  <div className="form-group">
+                <div>
+                  <div >
                     <label htmlFor="username">Username</label>
                     <Input
                       type="text"
@@ -400,7 +400,7 @@ const Register = React.memo((props) => {
                 </div>
               </div>
 
-              <div className="form-group">
+              <div >
                 <label htmlFor="email">Email</label>
                 <Input
                   type="text"
@@ -412,7 +412,7 @@ const Register = React.memo((props) => {
                 />
               </div>
 
-              <div className="form-group">
+              <div>
                 <label htmlFor="phonenumber">Phone Number</label>
                 <Input
                   type="text"
@@ -430,7 +430,7 @@ const Register = React.memo((props) => {
                 <select
                   value={tarif}
                   name="tarif"
-                  style={{ width: "270px", height: "40px" }}
+                  className="form-control"
                   onChange={handleTarifChange}
                 >
                   <option value="basic">basic</option>
@@ -439,7 +439,7 @@ const Register = React.memo((props) => {
                 </select>
               </div>
 
-              <div className="form-group">
+              <div >
                 <label htmlFor="password">Password</label>
                 <Input
                   type="password"
@@ -451,7 +451,7 @@ const Register = React.memo((props) => {
                 />
               </div>
 
-              <div className="form-group">
+              <div >
                 <label htmlFor="checkpassword">Password Verify</label>
                 <Input
                   type="password"
@@ -468,8 +468,8 @@ const Register = React.memo((props) => {
                 )}
               </div>
 
-              <div className="form-group">
-                <button className="btn btn-primary btn-block">Sign Up</button>
+              <div>
+                <button className="buttonRegister">Sign Up</button>
               </div>
             </div>
           )}
