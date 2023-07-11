@@ -1,4 +1,4 @@
-.card {
+/* .card {
   background-color: #fff;
   padding: 10px 20px;
   border-radius: 5px;
@@ -8,6 +8,18 @@
   width: 500px;
   height: 500px;
 }
+ */
+
+ .cardItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
 
 .card:hover {
   transform: scale(1.05); 
@@ -16,7 +28,7 @@
 .card-image-container {
   position: relative;
   overflow: hidden;
-  border-radius: 5px;
+  border-radius: 30px;
   height: 150px;
   margin-bottom: 10px;
 }

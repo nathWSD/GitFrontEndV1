@@ -73,9 +73,9 @@ export async function deleteUser(id, token) {
   }
 }
 
-export async function forgottenPassword(email, phonenumber) {
+export async function forgottenPassword(email, phonenumber, username, password) {
   try {
-    const response = await axiosInstance.delete(`http://localhost:8080/lendmove/api/auth/forgottenPassword/${email}${phonenumber}`, {
+    const response = await axiosInstance.post(`http://localhost:8080/lendmove/api/auth/update/${email}${phonenumber}${username}${password}`, {
      
     });
     return response.data;
