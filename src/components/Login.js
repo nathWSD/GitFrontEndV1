@@ -89,6 +89,7 @@ const Login = () => {
               type="text"
               className="form-control"
               name="username"
+              id="username" 
               value={username}
               onChange={onChangeUsername}
               validations={[required]}
@@ -102,6 +103,7 @@ const Login = () => {
                 type={passwordVisible ? "text" : "password"}
                 className="form-control password-input"
                 name="password"
+                id="password" 
                 value={password}
                 onChange={onChangePassword}
               />
