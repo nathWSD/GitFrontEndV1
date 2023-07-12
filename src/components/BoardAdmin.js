@@ -1,8 +1,7 @@
 import AuthService from "../services/auth.service";
 import { Link } from "react-router-dom";
-import { firstDropdownOptions, getDependentOptions } from "./dropdownOptions";
 import React, { useEffect, useState } from "react";
-import cardsData from "./cardsData"; // Path to the file where cardsData is defined
+import cardsData from "./cardsData"; 
 import {
   addVehicle,
   getAllReservations,
@@ -19,16 +18,12 @@ import "react-toastify/dist/ReactToastify.css";
 import "./Tabledesign.css";
 
 const BoardAdmin = () => {
-  const [selectedOption, setSelectedOption] = useState("");
-  const [dependentOption, setDependentOption] = useState("");
-  const [dependentOptions, setDependentOptions] = useState([]);
-  const [searchId, setSearchId] = useState("");
+   const [searchId, setSearchId] = useState("");
   const [searchResult, setSearchResult] = useState(null);
   const [users, setUsers] = useState([]);
 
   const [username, setUsername] = useState("");
   const [userDetails, setUserDetails] = useState({});
-  const [reservations, setReservations] = useState([]);
   const [usernameRoleChange, setusernameRoleChange] = useState("");
   const [message, setMessage] = useState("");
   const currentUser = AuthService.getCurrentUser();
@@ -49,13 +44,9 @@ const BoardAdmin = () => {
 
   const handleSearchCars = async () => {
     try {
-      const token = currentUser.token; // Get the token from localStorage or another source
-
-      // Call the findCarById function to fetch the car by ID
+      const token = currentUser.token; 
       const result = await findCarById(searchId, token);
-      // Process the result here
-      setTableVisible(true); // Set the visibility of the table to true
-
+      setTableVisible(true); 
       setSearchResult(result);
     } catch (error) {
       setError("Id does not corespond to any car");
@@ -63,27 +54,19 @@ const BoardAdmin = () => {
     }
   };
 
-  const handleFirstDropdownSelect = (event) => {
-    const selectedValue = event.target.value;
-    setSelectedOption(selectedValue);
-    const options = getDependentOptions(selectedValue);
-    setDependentOptions(options);
-    setDependentOption(""); // Reset the selected value of the dependent dropdown
-  };
-
-
+ 
 
   const handleSearchUser = async () => {
     try {
       const token = currentUser.token;
       const userData = await searchUserByUsername(username, token);
-      // Handle the retrieved user data
+   
       setUserDetails(userData);
       setIsUserTable(true);
     } catch (error) {
       toast.error("invalid user ");
       console.error("Error searching user:", error);
-      // Handle the error
+    
     }
   };
 
@@ -94,10 +77,8 @@ const BoardAdmin = () => {
         setShowTable(false);
         setUsers([]);
       } else {
-        // If the table is not visible, fetch the users and show the table
-        const response = await getAllUsers(0, 20, "username", "asc", token);
-        const usersArray = response.users; // Access the users array
-        setUsers(usersArray);
+                const response = await getAllUsers(0, 20, "username", "asc", token);
+        const usersArray = response.users;  setUsers(usersArray);
         setShowTable(true);
       }
     } catch (error) {
@@ -123,8 +104,7 @@ const BoardAdmin = () => {
     const token = currentUser.token;
     try {
       const roleRequest = {
-        role: ["worker"], // Replace 'worker' with the desired role(s)
-      };
+        role: ["worker"],  };
 
       const updateResponse = await updateRoleByUsername(
         usernameRoleChange,
@@ -147,18 +127,15 @@ const BoardAdmin = () => {
 
   const fetchAllReservations = async () => {
     try {
-      setIsLoading(true); // Set loading state to true
-
-      const token = currentUser.token; // Get the token from storage
-
-      // Call the API to fetch all reservations
+      setIsLoading(true); 
+      const token = currentUser.token; 
       const response = await getAllReservations(0, 20, "id", "asc", token);
 
-      setfindReservations(response.reservations); // Update reservations state with fetched data
-      setIsLoading(false); // Set loading state to false
+      setfindReservations(response.reservations); 
+      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false); // Set loading state to false
-      setError(error); // Set error state
+      setIsLoading(false); 
+      setError(error); 
     }
   };
 
@@ -176,29 +153,28 @@ const BoardAdmin = () => {
     try {
       const token = currentUser.token;
 
-      // If reservation data is already shown, hide it
+     
       if (showReservationDataByID) {
         setShowReservationDataByID(false);
-        setReservationData(null); // Reset reservation data
+        setReservationData(null); 
       } else {
         const data = await getReservationById(Number(reservationId), token);
 
         if (data && data.reservation) {
-          // Reservation data found
+       
           toast.success("Reservation found");
           setReservationData(data.reservation);
           console.log("This is reservation by id", data.reservation);
           setShowReservationDataByID(true);
         } else {
           toast.error("Reservation not found");
-          // Reservation data not found or null
-          setReservationData(null); // Reset reservation data
+          setReservationData(null); 
           setShowReservationDataByID(false);
         }
       }
     } catch (error) {
       console.error("Error fetching reservation:", error);
-      setReservationData(null); // Reset reservation data if an error occurs
+      setReservationData(null); 
       setShowReservationDataByID(false);
     }
   };
@@ -427,8 +403,7 @@ const BoardAdmin = () => {
           />
           <button className = "showReservationData"
             onClick={handleFindReservation}
-            disabled={!reservationId} // Disable button when reservationId is empty
-          >
+            disabled={!reservationId}   >
             {showReservationDataByID
               ? "Hide Reservation Data"
               : "Show Reservation Data"}
@@ -454,8 +429,7 @@ const BoardAdmin = () => {
               )}
 
               <ToastContainer />
-              {/* Add more reservation data properties here */}
-            </div>
+                </div>
           )}
 
           <button className = "showAllReservations"
