@@ -148,6 +148,7 @@ const ForgottenPassword = (props) => {
 
   return (
     <div className="ForgottenPassword_container">
+    <div className="ForgottenPassword_form">
       <Form onSubmit={handleForgottenPassword} ref={form}>
         {!successful && (
           <div>
@@ -248,6 +249,7 @@ const ForgottenPassword = (props) => {
           <button className="ButtonPasswordVergessen">Submit</button>
         </div>
       </Form>
+    </div>
     </div>
   );
 };

@@ -62,7 +62,9 @@ const App = () => {
       <nav className="navbar navbar-expand navbar-dark bg-dark">
         <li className="nav-item6">
           <Link to={"/"} className="navbar-brand">
-            Home
+          <img className="ImgLogo"
+           src="/LendmoveLogo.png" alt="Home"/>
+          
           </Link>
         </li>
    

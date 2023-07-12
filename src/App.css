@@ -7,7 +7,6 @@
   width: 100%;
   height: 100%;
   z-index: -12;
-  /* Additional styles for image or video */
 
 }
  
@@ -25,4 +24,10 @@
   margin-right: 0;
   padding-left: 0;
   padding-right: 0;
+}
+
+.ImgLogo{
+  max-width: 75px; /* The maximum width the image can have */
+  max-height: 75px; /* The maximum height the image can have */
+  margin-right: 4px;
 }

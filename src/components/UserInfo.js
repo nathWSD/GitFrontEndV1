@@ -1,11 +1,7 @@
 import React, { useState, useRef } from "react";
 import AuthService from "../services/auth.service";
 import "./UserInfo.css";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import BoardAdmin from "./BoardAdmin";
-import BoardUser from "./BoardUser";
-import BoardModerator from "./BoardModerator";
+
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -46,8 +42,7 @@ const UserInfo = () => {
   };
 
   const handleSave = () => {
-
-    if (     editedData.password !==editedData.checkpassword) {
+    if (editedData.password !== editedData.checkpassword) {
       setPasswordError("Passwords don't match.");
       return;
     }
@@ -82,7 +77,6 @@ const UserInfo = () => {
           setTimeout(() => {
             navigate("/BoardAdmin");
           }, 4000); // Delay the navigation by 4000 milliseconds (autoClose time of the toast)
-  
         } else if (
           currentUser &&
           currentUser.roles &&
@@ -91,7 +85,6 @@ const UserInfo = () => {
           setTimeout(() => {
             navigate("/BoardModerator");
           }, 4000); // Delay the navigation by 4000 milliseconds (autoClose time of the toast)
-  
         } else if (
           currentUser &&
           currentUser.roles &&
@@ -99,8 +92,7 @@ const UserInfo = () => {
         ) {
           setTimeout(() => {
             navigate("/BoardUser");
-          }, 4000); // Delay the navigation by 4000 milliseconds (autoClose time of the toast)
-  
+          }, 4000);
         } else {
         }
       })
@@ -119,13 +111,14 @@ const UserInfo = () => {
   };
 
   return (
+    
     <div className="userInfo">
       <div>
         <label className="UserInfo label">your ID: </label>
         {editing ? (
           <input
           className="form-control"
-            type="number"
+          type="number"
             name="id"
             value={editedData.id || ""}
             onChange={handleChange}
@@ -134,12 +127,13 @@ const UserInfo = () => {
           <span>{userData.id}</span>
         )}
       </div>
+      
 
       <div>
         <label className="UserInfo label">First name: </label>
         {editing ? (
           <input
-          className="form-control"
+            className="form-control"
             type="text"
             name="firstname"
             value={editedData.firstname || ""}
@@ -154,7 +148,7 @@ const UserInfo = () => {
         <label className="UserInfo label">Surname: </label>
         {editing ? (
           <input
-          className="form-control"
+            className="form-control"
             type="text"
             name="surname"
             value={editedData.surname || ""}
@@ -169,7 +163,7 @@ const UserInfo = () => {
         <label className="UserInfo label">User name: </label>
         {editing ? (
           <input
-          className="form-control"
+            className="form-control"
             type="text"
             name="username"
             value={editedData.username || ""}
@@ -184,7 +178,7 @@ const UserInfo = () => {
         <label className="UserInfo label">Password: </label>
         {editing ? (
           <input
-          className="form-control"
+            className="form-control"
             type="password"
             name="password"
             value={editedData.password || ""}
@@ -199,7 +193,7 @@ const UserInfo = () => {
         <label className="UserInfo label">Password verify: </label>
         {editing ? (
           <input
-          className="form-control"
+            className="form-control"
             type="password"
             name="checkpassword"
             value={editedData.checkpassword || ""}
@@ -209,17 +203,15 @@ const UserInfo = () => {
           <span>{userData.password}</span>
         )}
 
-{passwordError && (
-                  <div className="invalid-feedback d-block">
-                    {passwordError}
-                  </div>
-                )}
+        {passwordError && (
+          <div className="invalid-feedback d-block">{passwordError}</div>
+        )}
       </div>
       <div>
         <label className="UserInfo label">City: </label>
         {editing ? (
           <input
-             className="form-control"
+            className="form-control"
             type="text"
             name="city"
             value={editedData.city || ""}
@@ -234,7 +226,7 @@ const UserInfo = () => {
         <label className="UserInfo label">Country: </label>
         {editing ? (
           <input
-          className="form-control"
+            className="form-control"
             type="text"
             name="country"
             value={editedData.country || ""}
@@ -249,7 +241,7 @@ const UserInfo = () => {
         <label className="UserInfo label">street Name And Number </label>
         {editing ? (
           <input
-          className="form-control"
+            className="form-control"
             type="text"
             name="streetNameAndNumber"
             value={editedData.streetNameAndNumber || ""}
@@ -264,7 +256,7 @@ const UserInfo = () => {
         <label className="UserInfo label">postal Code: </label>
         {editing ? (
           <input
-          className="form-control"
+            className="form-control"
             type="text"
             name="postalCode"
             value={editedData.postalCode || ""}
@@ -279,7 +271,7 @@ const UserInfo = () => {
         <label className="UserInfo label">Email: </label>
         {editing ? (
           <input
-          className="form-control"
+            className="form-control"
             type="email"
             name="email"
             value={editedData.email || ""}
@@ -294,7 +286,7 @@ const UserInfo = () => {
         <label className="UserInfo label">phonenumber: </label>
         {editing ? (
           <input
-          className="form-control"
+            className="form-control"
             type="text"
             name="phonenumber"
             value={editedData.phonenumber || ""}
@@ -310,7 +302,7 @@ const UserInfo = () => {
           <label className="UserInfo label">Tarif:</label>
           {editing ? (
             <select
-            className="form-control"
+              className="form-control"
               name="tarif"
               value={editedData.tarif || "basic"}
               onChange={handleChange}

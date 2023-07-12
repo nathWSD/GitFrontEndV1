@@ -5,7 +5,7 @@ const TermsAndPolicy = () => {
     <div>
       <h1>Terms and Policy</h1>
 
-<p>----</p>
+<p></p>
 
 <div>OVERVIEW</div>
 

@@ -192,7 +192,7 @@ const ResetPersonalData = (
   checkpassword,
     ) => {
 
-  return axios.post(API_URL + "reset", {
+  return axios.post(API_URL + "update", {
     username,
     email,
     password,
