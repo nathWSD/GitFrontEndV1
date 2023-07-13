@@ -139,7 +139,7 @@ const Register = React.memo((props) => {
 
   const handleTarifChange = (event) => {
     const tarif = event.target.value;
-    console.log("Tarif:", tarif); // Log the value of tarif
+    console.log("Tarif:", tarif); 
     settarif(tarif);
   };
 
@@ -180,10 +180,9 @@ const Register = React.memo((props) => {
 
   const onChangephonenumber = (e) => {
     const phonenumber = e.target.value;
-    console.log("Phone Number:", phonenumber); // Log the value of phonenumber
+    console.log("Phone Number:", phonenumber); 
     const isValidPhoneNumber = /^\d{10}$/g.test(phonenumber);
 
-    // If the input is valid, update the phone number state
     if (isValidPhoneNumber) {
       setphonenumber(phonenumber);
     }

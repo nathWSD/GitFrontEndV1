@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Menu.css"; // Custom CSS file for additional styling
+import "./Menu.css"; 
 
 const Menu = () => {
   const [menuVisible, setMenuVisible] = useState(false);

@@ -75,9 +75,7 @@ const Abrechnung = ({ updatePaymentStatus }) => {
       showPaymentSuccessToast();
       setTimeout(() => {
         navigateToCurrentUserPage();
-      }, 4000); // Delay the navigation by 4000 milliseconds (autoClose time of the toast)
-
-      // Handle the retrieved user data
+      }, 4000); 
     } catch (error) {
       showPaymentErrorToast();
       console.error("Error with Bank payment:", error);
@@ -97,9 +95,7 @@ const Abrechnung = ({ updatePaymentStatus }) => {
 
       setTimeout(() => {
         navigateToCurrentUserPage();
-      }, 4000); // Delay the navigation by 4000 milliseconds (autoClose time of the toast)
-
-      // Handle the retrieved user data
+      }, 4000); 
     } catch (error) {
       showPaymentErrorToast();
       console.error("Error with paypal payment:", error);
@@ -170,7 +166,7 @@ const Abrechnung = ({ updatePaymentStatus }) => {
           {" "}
           <strong>Price:</strong> {price} {"\u20AC"}
         </p>
-        {/* Other payment-related components */}
+       
       </div>
       <div style={{ display: "flex" }}>
         <div
@@ -252,8 +248,7 @@ const Abrechnung = ({ updatePaymentStatus }) => {
                 selectedPaymentOption === "bank_transfer" ? "auto" : "none",
             }}
           >
-            {/* Add your form fields and inputs for bank transfer payment */}
-            {/* For example: */}
+           
             <label>
               Bank Account Number:
               <input

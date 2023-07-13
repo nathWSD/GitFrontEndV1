@@ -107,10 +107,10 @@ export async function findByUserReservation(activ, token) {
       "http://localhost:8080/lendmove/api/auth/reservation/user",
       {
         params: {
-          activ: activ // Set the 'activ' query parameter value
+          activ: activ 
         },
         headers: {
-          Authorization: `Bearer ${token}` // Include the Authorization header with the token
+          Authorization: `Bearer ${token}` 
         }
       }
     );

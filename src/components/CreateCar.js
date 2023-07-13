@@ -40,25 +40,22 @@ const CreateCar = () => {
 
     try {
         
-          console.log("Vehicle data:", newVehicle); // Log the vehicle data
-          await addVehicle(newVehicle, currentUser.token); // Pass the token as the second argument
+          console.log("Vehicle data:", newVehicle); 
+          await addVehicle(newVehicle, currentUser.token); 
         
       
 
     setMessage('Car created successfully!');
     setShowPopup(true);
 
-    // Perform form submission logic here (e.g., send data to backend)
     setTimeout(() => {
         setShowPopup(false);
         navigate('/BoardAdmin');
       }, 2000);
     } catch (error) {
-      // Handle any errors
       console.error(error);
       setMessage('Error creating car. Please try again.');
       setShowPopup(true);
-           // Hide the error message popup after 2 seconds
       setTimeout(() => {
         setShowPopup(false);
       }, 2000);
@@ -71,16 +68,7 @@ const CreateCar = () => {
       <h2>Create Car</h2>
       <form       className="CreateCarForm"
        onSubmit={handleSubmit}>
-     {/*    <div>
-          <label htmlFor="id">ID:</label>
-          <input
-            type="text"
-            id="id"
-            name="id"
-            value={formData.id}
-            onChange={handleChange}
-          />
-        </div> */}
+    
         <div>
           <label htmlFor="name">Name:</label>
           <input      className="form-control"

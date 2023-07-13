@@ -12,11 +12,11 @@
  
 
 .navbar {
-  /*position: fixed; */
+  
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 100; /* Increase the z-index value */
+  z-index: 100; 
 
 }
 .container {
@@ -27,7 +27,7 @@
 }
 
 .ImgLogo{
-  max-width: 75px; /* The maximum width the image can have */
-  max-height: 75px; /* The maximum height the image can have */
+  max-width: 75px; 
+  max-height: 75px; 
   margin-right: 4px;
 }

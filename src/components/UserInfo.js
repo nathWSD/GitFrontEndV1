@@ -68,7 +68,6 @@ const UserInfo = () => {
     )
       .then(() => {
         toast("Personal Data changed successful.", { autoClose: 2000 });
-        // Navigation based on user role
         if (
           currentUser &&
           currentUser.roles &&
@@ -76,7 +75,7 @@ const UserInfo = () => {
         ) {
           setTimeout(() => {
             navigate("/BoardAdmin");
-          }, 4000); // Delay the navigation by 4000 milliseconds (autoClose time of the toast)
+          }, 4000); 
         } else if (
           currentUser &&
           currentUser.roles &&
@@ -84,7 +83,7 @@ const UserInfo = () => {
         ) {
           setTimeout(() => {
             navigate("/BoardModerator");
-          }, 4000); // Delay the navigation by 4000 milliseconds (autoClose time of the toast)
+          }, 4000); 
         } else if (
           currentUser &&
           currentUser.roles &&
@@ -97,7 +96,6 @@ const UserInfo = () => {
         }
       })
       .catch((error) => {
-        // Handle error
         toast.error("Failed to change personal data.", { autoClose: 2000 });
         console.log(error);
       });
@@ -111,7 +109,7 @@ const UserInfo = () => {
   };
 
   return (
-    
+
     <div className="userInfo">
       <div>
         <label className="UserInfo label">your ID: </label>

@@ -2,8 +2,8 @@
 
   .card-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Create 3 columns with equal width */
-    grid-gap: 10px; /* Set the gap between cards */
+    grid-template-columns: repeat(3, 1fr); 
+    grid-gap: 10px; 
   }
 
   .input{
