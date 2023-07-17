@@ -53,7 +53,6 @@ export async function searchUserByUsername(username, token) {
     });
     return response.data;
   } catch (error) {
-    console.error('Error searching user by username:', error);
     throw error;
   }
 }
@@ -73,17 +72,24 @@ export async function deleteUser(id, token) {
   }
 }
 
-export async function forgottenPassword(email, phonenumber, username, password) {
+export async function forgottenPassword(id, username, email, password) {
   try {
-    const response = await axiosInstance.post(`http://localhost:8080/lendmove/api/auth/update/${email}${phonenumber}${username}${password}`, {
-     
-    });
+    const response = await axiosInstance.post(
+      "http://localhost:8080/lendmove/api/auth/forgottenPassword",
+      {
+        id: id,
+        username: username,
+        email: email,
+        password: password,
+      }
+    );
     return response.data;
   } catch (error) {
-    console.error('error reseting user data:', error);
+    console.error("error resetting user data:", error);
     throw error;
   }
 }
+
   
 /* --------------------Reservation manipulation---------- */
 export async function getAllReservations(page = 0, size = 20, sortBy = 'id', sortDir = 'asc', token) {
