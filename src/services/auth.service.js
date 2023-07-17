@@ -59,13 +59,12 @@ const login = (username, password) => {
     })
     .then((response) => {
       if (response.data.accessToken) {
-        const token = response.data.accessToken; // Use response.data.accessToken instead of response.data.token
+        const token = response.data.accessToken; 
         console.log(response.data.accessToken)
-        const user = response.data.user; // Assuming the response includes user information
-        localStorage.setItem(user.roles + "-token", token); // Store token based on user's role
+        const user = response.data.user; 
+        localStorage.setItem(user.roles + "-token", token); 
       }
       if (response.data.username) {
-        
         localStorage.setItem("user", JSON.stringify(response.data));
       }
 
@@ -76,9 +75,8 @@ const login = (username, password) => {
 
 const logout = () => {
   localStorage.removeItem('user');
-  return axios.post('http://localhost:8080/lendmove/api/auth/logout')
+  return axios.get('http://localhost:8080/lendmove/api/auth/logoutUser')
     .then(response => {
-      // Handle successful logout
       console.log('Logout successful');
     })
     .catch(error => {
@@ -137,7 +135,6 @@ const changePersonalData = (
   streetNameAndNumber,
   phonenumber,
   tarif,
-  checkpassword
 ) => {
   const token = JSON.parse(localStorage.getItem("user")).token;
 
@@ -154,7 +151,6 @@ const changePersonalData = (
     streetNameAndNumber,
     phonenumber,
     tarif,
-    checkpassword
   };
 
   const headers = {

@@ -4,7 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import "./ForgottenPassword.css";
-import AuthService from "../services/auth.service";
+import {forgottenPassword} from "../services/AdminAccessService";
 import { useNavigate } from "react-router-dom";
 
 const required = (value) => {
@@ -54,7 +54,6 @@ const ForgottenPassword = (props) => {
 
   const [id , setId] = useState("");
   const [email, setEmail] = useState("");
-  const [phonenumber, setphonenumber] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [checkpassword, setcheckPassword] = useState("");
@@ -65,17 +64,6 @@ const ForgottenPassword = (props) => {
   const onChangeUsername = (e) => {
     const username = e.target.value;
     setUsername(username);
-  };
-
-  const onChangephonenumber = (e) => {
-    const phonenumber = e.target.value;
-    console.log("Phone Number:", phonenumber); 
-    const isValidPhoneNumber = /^\d{10}$/g.test(phonenumber);
-
-    
-    if (isValidPhoneNumber) {
-      setphonenumber(phonenumber);
-    }
   };
 
   
@@ -101,7 +89,7 @@ const ForgottenPassword = (props) => {
 
   
 
-  const handleForgottenPassword = (e) => {
+  const handleForgottenPassword = async (e) => {
     e.preventDefault();
 
     setMessage("");
@@ -110,14 +98,12 @@ const ForgottenPassword = (props) => {
     form.current.validateAll();
     const formIsValid = form.current.getChildContext()._errors.length === 0;
 
-  if (formIsValid)  {
-      AuthService.ResetPersonalData(
+   if (formIsValid)  {
+     await forgottenPassword(
         id,
         username,
         email,
         password,
-        phonenumber,
-        checkpassword,
       ).then(
         (response) => {
           setTimeout(() => {
@@ -180,25 +166,12 @@ const ForgottenPassword = (props) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="phonenumber">Phone Number</label>
-              <Input
-                type="text"
-                className="form-control"
-                name="phonenumber"
-                placeholder="Enter phone number"
-                value={phonenumber}
-                onChange={onChangephonenumber}
-                validations={[required]}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="phonenumber">new Username</label>
+              <label htmlFor="username"> Username</label>
               <Input
                 type="text"
                 className="form-control"
                 name="username"
-                placeholder="Enter new username"
+                placeholder="Enter username"
                 value={username}
                 onChange={onChangeUsername}
                 validations={[required]}
@@ -206,7 +179,7 @@ const ForgottenPassword = (props) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="phonenumber">new Password</label>
+              <label htmlFor="password">new Password</label>
               <Input
                 type="password"
                 className="form-control"
@@ -219,7 +192,7 @@ const ForgottenPassword = (props) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="phonenumber">Check Password</label>
+              <label htmlFor="checkpassword">Check Password</label>
               <Input
                 type="password"
                 className="form-control"

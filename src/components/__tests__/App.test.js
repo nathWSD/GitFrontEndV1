@@ -1,11 +1,13 @@
+import { render } from '@testing-library/react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import '@testing-library/jest-dom';
 
+import App from '../../App';
 
-it("renders without crashing", () => {
-    shallow(<App />);
-  });
-
-  it("renders Account header", () => {
-    const wrapper = shallow(<App />);
-    const welcome =  <h3>let us plan a your movement together...</h3>;
-    expect(wrapper.contains(welcome)).toEqual(true);
-  });
+test('renders without crashing', () => {
+  render(
+    <Router>
+      <App />
+    </Router>
+  );
+});

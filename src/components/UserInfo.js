@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect  } from "react";
 import AuthService from "../services/auth.service";
 import "./UserInfo.css";
 
@@ -26,8 +26,7 @@ const UserInfo = () => {
     country: "",
     streetNameAndNumber: "",
     phonenumber: "",
-    tarif: "" /* must be nullable at back end  */,
-    checkpassword: "",
+    tarif: "" /* must be nullable at backend  */,
   });
 
   const form = useRef();
@@ -36,6 +35,14 @@ const UserInfo = () => {
     { label: "normal", value: "normal" },
     { label: "exclusiv", value: "exclusiv" },
   ];
+
+
+  useEffect(() => {
+    // Check if editedData.tarif is empty, and if so, set it to "basic"
+    if (!editedData.tarif) {
+      setEditedData({ ...editedData, tarif: "basic" });
+    }
+  }, [editedData]); // Run this effect whenever editedData changes
   const handleEdit = () => {
     setEditing(true);
     setEditedData({ ...userData });
@@ -47,7 +54,7 @@ const UserInfo = () => {
       return;
     }
     setUserData({ ...editedData });
-    console.log(editedData);
+    console.log("handle save funtion ",editedData);
 
     setEditing(false);
     console.log(currentUser.token);
@@ -64,7 +71,6 @@ const UserInfo = () => {
       editedData.streetNameAndNumber,
       editedData.phonenumber,
       editedData.tarif,
-      editedData.checkpassword
     )
       .then(() => {
         toast("Personal Data changed successful.", { autoClose: 2000 });
@@ -106,6 +112,7 @@ const UserInfo = () => {
       ...editedData,
       [e.target.name]: e.target.value,
     });
+    console.log("hange change function ",editedData);
   };
 
   return (

@@ -1,14 +1,23 @@
-# Utiliser une image de base
-FROM nginx:latest
+# Use an official Node.js runtime as the base image
+FROM node:14
 
-# Définir le répertoire de travail
-WORKDIR /usr/share/nginx/html
+# Set the working directory in the container
+WORKDIR /app
 
-# Copier les fichiers frontend dans le conteneur
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy the entire application to the working directory
 COPY . .
 
-# Exposer le port nécessaire
+# Build the application
+RUN npm run build
+
+# Expose the desired port (optional)
 EXPOSE 3000
 
-# Définir la commande pour démarrer le serveur
-CMD ["nginx", "-g", "daemon off;"]
+# Define the command to run the application
+CMD [ "npm", "start" ]

@@ -16,6 +16,7 @@ import "./BoardAdmin.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Tabledesign.css";
+import { Toast } from "bootstrap";
 
 const BoardAdmin = () => {
    const [searchId, setSearchId] = useState("");
@@ -45,9 +46,13 @@ const BoardAdmin = () => {
   const handleSearchCars = async () => {
     try {
       const token = currentUser.token; 
+      if (searchId){
       const result = await findCarById(searchId, token);
       setTableVisible(true); 
       setSearchResult(result);
+    }else{
+      toast.error("car Id must be given");
+    }
     } catch (error) {
       setError("Id does not corespond to any car");
       console.error("Error searching cars:", error);

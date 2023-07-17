@@ -49,17 +49,21 @@ const BoardModerator = () => {
 
   const handleSearchCars = async () => {
     try {
+      if(searchId){
       const token = currentUser.token;
       const response = await findCarById(searchId, token);
       const result = response;
-      console.log("this is result", result);
-
+  
       if (result && result.found) {
         setSearchResult(result);
       } else {
         toast.error("Car not found with the given ID.");
         setSearchResult(null);
       }
+    }
+    else{
+      toast.error("car Id not valid");
+    }
     } catch (error) {
       console.error("Error searching cars:", error);
       toast.error("Error searching cars: An unexpected error occurred.");
@@ -72,31 +76,29 @@ const BoardModerator = () => {
     setSelectedOption(selectedValue);
     const options = getDependentOptions(selectedValue);
     setDependentOptions(options);
-    setDependentOption(""); // Reset the selected value of the dependent dropdown
+    setDependentOption(""); 
   };
 
   const handleSearchUser = async () => {
     try {
       const token = currentUser.token;
       const userData = await searchUserByUsername(username, token);
-      // Handle the retrieved user data
       setUserDetails(userData);
       setIsUserTable(true);
     } catch (error) {
       toast.error("invalid user ");
-      console.error("Error searching user:", error);
-      // Handle the error
     }
   };
 
   const fetchAllUsers = async () => {
+    console.log(currentUser);
+
     const token = currentUser.token;
     try {
       if (showTable) {
         setShowTable(false);
         setUsers([]);
       } else {
-        // If the table is not visible, fetch the users and show the table
         const response = await getAllUsers(0, 20, "username", "asc", token);
         const usersArray = response.users; // Access the users array
         setUsers(usersArray);
@@ -114,7 +116,6 @@ const BoardModerator = () => {
 
       const token = currentUser.token; // Get the token from storage
 
-      // Call the API to fetch all reservations
       const response = await getAllReservations(0, 20, "id", "asc", token);
 
       setfindReservations(response.reservations); // Update reservations state with fetched data
